@@ -1,0 +1,101 @@
+/* verification-styles.css - Styles for the verification page */
+
+/* Container Layout */
+.verification-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Logo Styling */
+.logo-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.logo-img {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    display: block;
+    object-fit: contain;
+}
+
+/* Card Styling */
+.verification-card {
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Messages */
+.status-message {
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.status-message.checking {
+    background: #EFF6FF;
+    color: #1D4ED8;
+}
+
+.status-message.success {
+    background: #ECFDF5;
+    color: #047857;
+}
+
+.status-message.error {
+    background: #FEF2F2;
+    color: #DC2626;
+}
+
+/* Details Section */
+.details-section {
+    background: #F9FAFB;
+    border-radius: var(--border-radius);
+    margin-top: 1.5rem;
+}
+
+/* Buttons */
+.return-button {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: background-color var(--transition-time);
+}
+
+.return-button:hover {
+    background: var(--primary-dark);
+}
+
+.return-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Lists and Description Terms */
+dl {
+    margin: 0;
+}
+
+dt {
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+dd {
+    margin-left: 0;
+    margin-bottom: 1rem;
+}
+
+/* Animation */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

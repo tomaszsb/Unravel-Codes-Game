@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Game Data Verification">
+    <title>Game Data Verification</title>
+    
+    <!-- Load core CSS -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/verification-styles.css">
+    
+    <!-- External Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+    <!-- Core Game Systems -->
+    <script src="js/file-system.js"></script>
+    <script src="js/csv-parser.js"></script>
+    <script src="js/save-manager.js"></script>
+    <script src="js/game-data-manager.js"></script>
+    <script src="js/player-manager.js"></script>
+    <script src="js/player-progress-manager.js"></script>
+    <script src="js/color-manager.js"></script>
+    <script src="js/game-initializer.js"></script>
+</head>
+<body>
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <div class="loading-message">Loading verification system...</div>
+    </div>
+
+    <div class="verification-container">
+        <div class="logo-container">
+            <img src="Graphics/UC3.png" alt="Game Logo" class="logo-img">
+        </div>
+        <div id="verification-root"></div>
+    </div>
+
+    <script>
+        // Error Boundary Component
+        class ErrorBoundary extends React.Component {
+            constructor(props) {
+                super(props);
+                this.state = { hasError: false, error: null };
+            }
+
+            static getDerivedStateFromError(error) {
+                return { hasError: true, error };
+            }
+
+            componentDidCatch(error, errorInfo) {
+                console.error('Component Error:', error, errorInfo);
+            }
+
+            render() {
+                if (this.state.hasError) {
+                    return React.createElement('div', {
+                        className: 'verification-card'
+                    }, [
+                        React.createElement('h2', {
+                            key: 'title',
+                            className: 'text-xl font-bold mb-4 text-red-600'
+                        }, 'Verification Error'),
+                        React.createElement('p', {
+                            key: 'message',
+                            className: 'mb-4'
+                        }, this.state.error?.message || 'An unexpected error occurred'),
+                        React.createElement('button', {
+                            key: 'retry',
+                            onClick: () => window.location.reload(),
+                            className: 'return-button'
+                        }, 'Retry Verification')
+                    ]);
+                }
+                return this.props.children;
+            }
+        }
+
+        // Verification UI Component
+        const VerificationUI = () => {
+            const [status, setStatus] = React.useState('checking');
+            const [details, setDetails] = React.useState(null);
+            const [error, setError] = React.useState(null);
+
+            React.useEffect(() => {
+                const startVerification = async () => {
+                    try {
+                        // Subscribe to initialization events
+                        window.GameInitializer.subscribe((event, data) => {
+                            if (event === 'INITIALIZATION_COMPLETE') {
+                                setStatus('success');
+                                setDetails(data);
+                                // Redirect to game board after short delay
+                                setTimeout(() => {
+                                    window.location.href = 'game-board.html';
+                                }, 1000);
+                            } else if (event === 'INITIALIZATION_ERROR') {
+                                setError(data.message || 'Verification failed');
+                                setStatus('error');
+                            }
+                        });
+
+                        // Start initialization
+                        const success = await window.GameInitializer.initialize();
+                        if (!success) {
+                            throw new Error('Game initialization failed');
+                        }
+
+                    } catch (err) {
+                        console.error('Verification failed:', err);
+                        setError(err.message || 'Verification failed');
+                        setStatus('error');
+                    }
+                };
+
+                startVerification();
+            }, []); // Empty dependency array
+
+            // Loading state
+            if (status === 'checking' && !error) {
+                return React.createElement('div', { 
+                    className: 'verification-card' 
+                }, React.createElement('div', {
+                    className: 'text-center'
+                }, 'Verifying game data...'));
+            }
+
+            // Main render
+            return React.createElement('div', { 
+                className: 'verification-card' 
+            }, [
+                React.createElement('h2', { 
+                    key: 'title',
+                    className: 'text-xl font-bold mb-4' 
+                }, 'Game Verification'),
+
+                React.createElement('div', { 
+                    key: 'status',
+                    className: `status-message ${status}`
+                }, status === 'checking' ? 'Verifying game data...' : 
+                status === 'success' ? 'Verification successful! Starting game...' :
+                `Verification failed: ${error}`),
+
+                status === 'error' && React.createElement('button', {
+                    key: 'error-button',
+                    onClick: () => window.location.href = 'player-setup.html',
+                    className: 'return-button'
+                }, 'Return to Setup'),
+
+                status === 'success' && details && React.createElement('div', {
+                    key: 'details',
+                    className: 'details-section'
+                }, [
+                    React.createElement('h3', {
+                        key: 'details-title',
+                        className: 'font-bold mb-2'
+                    }, 'Verification Details:'),
+                    React.createElement('dl', {
+                        key: 'details-list',
+                        className: 'space-y-2'
+                    }, [
+                        React.createElement('div', {
+                            key: 'game-type',
+                            className: 'mb-2'
+                        }, [
+                            React.createElement('dt', { className: 'font-medium' }, 'Game Type:'),
+                            React.createElement('dd', null, details.isNewGame ? 'New Game' : 'Continuing Game')
+                        ]),
+                        React.createElement('div', {
+                            key: 'verified-components'
+                        }, [
+                            React.createElement('dt', { className: 'font-medium' }, 'Verified Components:'),
+                            React.createElement('dd', null, details.verified?.join(', ') || 'None')
+                        ])
+                    ])
+                ])
+            ]);
+        };
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const root = document.getElementById('verification-root');
+                if (!root) {
+                    throw new Error('Verification root not found');
+                }
+
+                ReactDOM.render(
+                    React.createElement(ErrorBoundary, null,
+                        React.createElement(VerificationUI)
+                    ),
+                    root
+                );
+
+                // Hide loading overlay after initial render
+                const loadingOverlay = document.getElementById('loadingOverlay');
+                if (loadingOverlay) {
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingOverlay.style.display = 'none';
+                    }, 300);
+                }
+
+            } catch (error) {
+                console.error('Failed to initialize verification:', error);
+                showError(`Initialization failed: ${error.message}`);
+            }
+        });
+
+        // Helper function to show errors
+        function showError(message) {
+            const root = document.getElementById('verification-root');
+            if (root) {
+                root.innerHTML = `
+                    <div class="verification-card">
+                        <h2 class="text-xl font-bold mb-4 text-red-600">Initialization Error</h2>
+                        <p class="mb-4">${message}</p>
+                        <button onclick="window.location.reload()" class="return-button">
+                            Retry
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

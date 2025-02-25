@@ -1,0 +1,55 @@
+﻿Space Name,Die Roll,Visit Type,1,2,3,4,5,6
+OWNER-SCOPE-INITIATION,W Cards,First,Draw 1,Draw 1,Draw 2,Draw 2,Draw 3,Draw 3
+OWNER-SCOPE-INITIATION,W Cards,Subsequent,Draw 1,Draw 1,Draw 2,Draw 2 W Cards,Draw 3,Draw 3
+ARCH-FEE-REVIEW,Fees Paid,First,8%,8%,10%,10%,12%,12%
+ARCH-FEE-REVIEW,Fees Paid,Subsequent,0%,0%,1%,1%,2%,2%
+ARCH-INITIATION,Next Step,Subsequent,ENG-INITIATION or PM-DECISION-CHECK - No review,ENG-INITIATION or PM-DECISION-CHECK - No review,ENG-INITIATION or PM-DECISION-CHECK - No review,ARCH-FEE-REVIEW - Review needed ,ARCH-FEE-REVIEW - Review needed ,ARCH-FEE-REVIEW - Review needed 
+ARCH-SCOPE-CHECK,W Cards,First,Remove 1,Draw 1,Replace 1,No change,No change,No change
+ARCH-SCOPE-CHECK,W Cards,Subsequent,Remove 1,Draw 1,Replace 1,No change,No change,No change
+CHEAT-BYPASS,Time outcomes,First,1 day,2 days,3 days,4 days,60 days,365 days
+CHEAT-BYPASS,Time outcomes,Subsequent,1 day,2 days,3 days,4 days,60 days,365 days
+CHEAT-BYPASS,Next Step,First,ENG-INITIATION,REG-DOB-FEE-REVIEW,REG-FDNY-FEE-REVIEW,CON-INITIATION,PM-DECISION-CHECK - Cought,PM-DECISION-CHECK - Went to jail
+CHEAT-BYPASS,Next Step,Subsequent,ENG-INITIATION,REG-DOB-FEE-REVIEW,REG-FDNY-FEE-REVIEW,CON-INITIATION,PM-DECISION-CHECK - Cought,PM-DECISION-CHECK - Went to jail
+CON-INITIATION,Quality,First,HIGH,HIGH,MED,MED,LOW,LOW
+CON-INITIATION,Time outcomes,Subsequent,5 days,10 days,15 days,20 days,25 days,30 days
+CON-INITIATION,Multiplier ,First,1,2,3,4,5,6
+CON-INITIATION,Fee Paid,Subsequent,0%,2%,4%,6%,8%,10%
+CON-INSPECT,Next Step,First,REG-DOB-FINAL-REVIEW - Pass,REG-DOB-FINAL-REVIEW - Minor fixes,REG-DOB-FINAL-REVIEW - Moderate Rework,CON-ISSUES -Construction issues,REG-FDNY-FEE-REVIEW - FDNY review needed,REG-DOB-FEE-REVIEW - DOB review
+CON-INSPECT,Next Step,Subsequent,REG-DOB-FINAL-REVIEW - Pass ,REG-DOB-FINAL-REVIEW - Pass,REG-DOB-FINAL-REVIEW - Pass,REG-DOB-FINAL-REVIEW - Minor fixes,REG-DOB-FINAL-REVIEW - Moderate Rework,CON-ISSUES - Construction issues
+CON-INSPECT,Time outcomes,First,1 day,5 days,25 days,1 day,1 day,1 day
+CON-INSPECT,Time outcomes,Subsequent,1 day,1 day,1 day,5 days,25 days,1 day
+CON-ISSUES,Next Step,First,CON-INSPECT - No issues ,CON-INSPECT - Minor,REG-FDNY-FEE-REVIEW - Small issue,Medium issue - REG-DOB-FEE-REVIEW,Major issue - ENG-INITIATION,ARCH-INITIATION - Critical issue
+CON-ISSUES,Next Step,Subsequent,CON-INSPECT - No issues,CON-INSPECT - Minor,CON-INSPECT - No issues,Minor - CON-INSPECT,Small issue - REG-FDNY-FEE-REVIEW,REG-DOB-FEE-REVIEW - Medium issue
+CON-ISSUES,Time outcomes,First,1 day,15 days,1 day,1 day,1 day,1 day
+CON-ISSUES,Time outcomes,Subsequent,1 day,1 day,1 day,15 days,1 day,1 day
+ENG-FEE-REVIEW,Time outcomes,First,2%,2%,4%,4%,6%,6%
+ENG-FEE-REVIEW,Time outcomes,Subsequent,0%,0%,1%,1%,2%,2%
+ENG-INITIATION,Next Step,Subsequent,PM-DECISION-CHECK or REG-DOB-FEE- No review,PM-DECISION-CHECK or REG-DOB-FEE-REVIEW - No review,PM-DECISION-CHECK or REG-DOB-FEE-REVIEW - No review,ENG-FEE-REVIEW - Review needed,ENG-FEE-REVIEW - Review needed,ENG-FEE-REVIEW - Review needed
+ENG-SCOPE-CHECK,W Cards,First,Remove 1,Draw 1,Replace 1,No change,No change,No change
+ENG-SCOPE-CHECK,W Cards,Subsequent,Remove 1,Draw 1,Replace 1,No change,No change,No change
+FINISH,Time outcomes,First,,,,,,
+FINISH,Time outcomes,Subsequent,,,,,,
+INVESTOR-FUND-REVIEW,I Cards,First,Draw 1 I,Draw 1,Draw 1,Draw 2,Draw 2 ,Draw 2
+INVESTOR-FUND-REVIEW,I Cards,Subsequent,Draw 1 I Card,Draw 1,Draw 1,Draw 2,Draw 2 ,Draw 2
+INVESTOR-FUND-REVIEW,Time outcomes,First,30 days,30 days,30 days,50 days,50 days,70 days 
+INVESTOR-FUND-REVIEW,Time outcomes,Subsequent,30 days,30 days,50 days,50 days,70 days,70 days 
+LEND-SCOPE-CHECK,W Cards,First,Remove 1,Draw 1,Draw 1,Replace 1,Replace 1,No change
+LEND-SCOPE-CHECK,W Cards,Subsequent,Remove 1,Draw 1,Replace 1,No change,No change,No change
+OWNER-DECISION-REVIEW,W Cards,First,Remove 1,Draw 1,Draw 1,Replace 1,Replace 1,No change
+OWNER-DECISION-REVIEW,W Cards,Subsequent,Remove 1,Draw 1,Replace 1,No change,No change,No change
+OWNER-DECISION-REVIEW,E cards,First,Remove 1,Draw 1,Draw 1,Replace 1,Replace 1,No change
+OWNER-DECISION-REVIEW,E cards,Subsequent,Remove 1,Draw 1,Replace 1 E Card,No change,No change,No change
+REG-DOB-AUDIT,Time outcomes,First,REG-DOB-FINAL-REVIEW - Pass,REG-DOB-PLAN-EXAM - Missing files,REG-DOB-PLAN-EXAM - Missing files ,ARCH-INITIATION - Major problem,ARCH-INITIATION - Major problem,REG-FDNY-FEE-REVIEW - Missing Approval  (must come back here after FDNY)
+REG-DOB-AUDIT,Time outcomes,Subsequent,REG-DOB-FINAL-REVIEW - Pass ,REG-FDNY-FEE-REVIEW - Pass,REG-DOB-PLAN-EXAM - Missing files ,REG-DOB-PLAN-EXAM - Missing files ,ARCH-INITIATION - Major problem,REG-FDNY-FEE-REVIEW - Missing Approval  (must come back here after FDNY)
+REG-DOB-FEE-REVIEW,Time outcomes,First,,,,,,
+REG-DOB-FEE-REVIEW,Time outcomes,Subsequent,0%,0%,0%,1%,1%,1%
+REG-DOB-FINAL-REVIEW,Next Step,First,FINISH - Pass,FINISH - Pass,FINISH -Missing document,Missing original document - FINISH,Missing inspection - CON-INSPECT,REG-FDNY-FEE-REVIEW -Missing Approval 
+REG-DOB-FINAL-REVIEW,Next Step,Subsequent,FINISH - Pass,FINISH - Pass,FINISH - Pass,Missing document - FINISH,Missing original document - FINISH,CON-INSPECT - Missing inspection
+REG-DOB-FINAL-REVIEW,Time outcomes,First,1 day,1 day,10 days,30 days,1 day,1 day
+REG-DOB-FINAL-REVIEW,Time outcomes,Subsequent,1 day,1 day,1 day,10 days,30 days,1 day
+REG-DOB-PLAN-EXAM,Time outcomes,First,REG-FDNY-FEE-REVIEW - Pass,REG-DOB-PLAN-EXAM - Missing files,ARCH-INITIATION - Major problem,ARCH-INITIATION - Major problem,REG-FDNY-FEE-REVIEW - Missing Approval  (must come back here after FDNY),REG-FDNY-FEE-REVIEW - Missing Approval  (must come back here after FDNY)
+REG-DOB-PLAN-EXAM,Time outcomes,Subsequent,REG-FDNY-FEE-REVIEW - Pass,REG-FDNY-FEE-REVIEW - Pass,REG-FDNY-FEE-REVIEW - Pass,REG-DOB-PLAN-EXAM - Missing files ,ARCH-INITIATION - Major problem,REG-FDNY-FEE-REVIEW - Missing Approval  (must come back here after FDNY)
+REG-DOB-PROF-CERT,Time outcomes,First,REG-DOB-AUDIT,REG-DOB-AUDIT,REG-FDNY-FEE-REVIEW,REG-FDNY-FEE-REVIEW,REG-FDNY-FEE-REVIEW,REG-FDNY-FEE-REVIEW
+REG-DOB-PROF-CERT,Time outcomes,Subsequent,REG-DOB-AUDIT,REG-FDNY-FEE-REVIEW,REG-FDNY-FEE-REVIEW,REG-FDNY-FEE-REVIEW,REG-FDNY-FEE-REVIEW,REG-FDNY-FEE-REVIEW
+REG-FDNY-PLAN EXAM,Time outcomes,First,CON-SETUP or REG-PLAN-EXAM or REG-AUDIT or PM-DECISION-CHECK - Pass,CON-SETUP or REG-PLAN-EXAM or REG-AUDIT or PM-DECISION-CHECK - Pass,REG FDNY - Missing files ,REG FDNY - Missing files ,ENG-INITIATION - Minor changes,ARCH-INITIATION - Major changes
+REG-FDNY-PLAN EXAM,Time outcomes,Subsequent,CON-SETUP or REG-PLAN-EXAM or REG-AUDIT or PM-DECISION-CHECK - Pass,CON-SETUP or REG-PLAN-EXAM or REG-AUDIT or PM-DECISION-CHECK - Pass,CON-SETUP or REG-PLAN-EXAM or REG-AUDIT or PM-DECISION-CHECK - Pass,REG FDNY - Missing files ,REG FDNY - Missing files ,ENG-INITIATION - Minor changes

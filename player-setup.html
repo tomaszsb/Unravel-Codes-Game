@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Setup</title>
+    <!-- Updated CSS order: theme first, then specific styles -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/setup-styles.css">
+
+   <!-- Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+
+    <!-- Core File System - Must load first! -->
+    <script src="js/file-system.js"></script>
+
+    <!-- Game Dependencies - Load after file system -->
+    <script src="js/csv-parser.js"></script>
+    <script src="js/save-manager.js"></script>
+    <script src="js/player-palettes.js"></script>
+    <script src="js/color-manager.js"></script>
+    <script src="js/player-manager.js"></script>
+    <script src="js/game-data-manager.js"></script>
+
+    <script>
+        // Function to check if all required scripts are loaded
+        function checkDependencies() {
+            const requiredObjects = [
+                'GamePlayerManager', 
+                'PlayerPalettes', 
+                'GameColorManager', 
+                'GameSaveManager',
+                'GameDataManager'  // Added for continue game path
+            ];
+            const missing = requiredObjects.filter(obj => !window[obj]);
+            if (missing.length > 0) {
+                console.error('Missing required objects:', missing);
+                return false;
+            }
+            return true;
+        }
+
+        // Wait for all scripts to load
+        window.addEventListener('load', () => {
+            // Check if scripts loaded properly
+            if (!checkDependencies()) {
+                // Show error to user
+                const statusMessage = document.getElementById('statusMessage');
+                if (statusMessage) {
+                    statusMessage.textContent = 'Error loading game components. Please refresh the page.';
+                    statusMessage.style.color = 'red';
+                }
+                return;
+            }
+            
+            // If all dependencies are loaded, initialize setup
+            initializeSetup();
+        });
+    </script>
+    
+    <script>
+        let selectedPlayerCount = 0;
+        let setupInitialized = false;
+
+        async function initializeSetup() {
+            console.log('Initializing setup');
+            
+            try {
+                console.log('Checking GameDataManager status...');
+                // Initialize GameDataManager first
+                if (!window.GameDataManager.isReady()) {
+                    console.log('GameDataManager not ready, initializing...');
+                    const initResult = await window.GameDataManager.initialize();
+                    if (!initResult.success) {
+                        throw new Error(`Failed to initialize game data: ${initResult.errors.join(', ')}`);
+                    }
+                    console.log('GameDataManager initialized successfully');
+                }
+
+                // Check for existing saved players
+                console.log('Checking for saved players...');
+                const savedPlayers = await window.GameSaveManager.load('players');
+                console.log('Saved players:', savedPlayers);
+                
+                if (savedPlayers) {
+                    console.log('Found existing players, handling...');
+                    handleExistingPlayers();
+                } else {
+                    console.log('No existing players, starting new setup...');
+                    startNewPlayerSetup();
+                }
+            } catch (error) {
+                console.error('Setup initialization error:', error);
+                showError('Failed to initialize game setup. Please refresh the page.');
+            }
+        }
+            
+        function createPaletteSelection(paletteName, colors) {
+            const card = document.createElement('div');
+            card.className = 'palette-card';
+
+            const preview = document.createElement('div');
+            preview.className = 'color-preview';
+            colors.forEach(color => {
+                const strip = document.createElement('div');
+                strip.className = 'color-strip';
+                strip.style.backgroundColor = color;
+                preview.appendChild(strip);
+            });
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'name-input';
+            input.placeholder = 'Enter player name (2-20 chars)';
+            input.dataset.palette = paletteName;
+            input.minLength = 2;
+            input.maxLength = 20;
+            input.pattern = '[a-zA-Z0-9 -_]+';
+            input.title = 'Name can contain letters, numbers, spaces, hyphens, and underscores';
+            
+            input.addEventListener('input', (e) => {
+                const sanitizedValue = e.target.value.replace(/[^a-zA-Z0-9\s-_]/g, '').trim().substring(0, 20);
+                if (sanitizedValue !== e.target.value) {
+                    e.target.value = sanitizedValue;
+                }
+                
+                updatePaletteAvailability();
+                if (sanitizedValue) {
+                    window.GameColorManager.updateThemeColors(colors);
+                }
+            });
+
+            card.appendChild(preview);
+            card.appendChild(input);
+            return card;
+        }
+
+        // All other original functions remain unchanged
+        function showPlayerDetailsEntry() {
+            console.log("Showing player details entry");
+            const detailsSection = document.getElementById('playerDetailsEntry');
+            const startButton = document.getElementById('startGame');
+            const container = document.getElementById('paletteSelectionGrid');
+            
+            if (!detailsSection || !startButton || !container) {
+                console.error("Required elements not found");
+                return;
+            }
+
+            detailsSection.style.display = 'block';
+            startButton.style.display = 'block';
+            
+            const palettes = window.PlayerPalettes.getAllColorPalettes();
+            console.log("Available palettes:", palettes);
+            
+            container.innerHTML = '';
+            
+            Object.entries(palettes).forEach(([name, colors]) => {
+                const paletteCard = createPaletteSelection(name, colors);
+                container.appendChild(paletteCard);
+            });
+            
+            updatePaletteAvailability();
+        }
+
+        function updatePaletteAvailability() {
+            const inputs = document.querySelectorAll('.name-input');
+            const filledInputs = Array.from(inputs).filter(input => input.value.trim()).length;
+            
+            inputs.forEach(input => {
+                const card = input.closest('.palette-card');
+                if (!input.value.trim() && filledInputs >= selectedPlayerCount) {
+                    card.classList.add('disabled');
+                } else {
+                    card.classList.remove('disabled');
+                }
+            });
+
+            const startButton = document.getElementById('startGame');
+            startButton.disabled = filledInputs !== selectedPlayerCount;
+        }
+
+        function savePlayerSettings() {
+            console.log('Saving player settings, selectedPlayerCount:', selectedPlayerCount);
+
+            // Get all name inputs 
+            const inputs = document.querySelectorAll('.name-input');
+            
+            // Create players array with proper format
+            const players = Array.from(inputs)
+                .filter(input => {
+                    const isValid = input.value.trim() && !input.closest('.palette-card').classList.contains('disabled');
+                    return isValid;
+                })
+                .map(input => ({
+                    name: input.value.trim(),
+                    palette: input.dataset.palette 
+                }));
+            
+            // Add more detailed logging
+            console.log('Players data before save:', players);
+            console.log('Player data structure validation:', players.length > 0 && players.every(p => p.name && p.palette));
+
+            try {
+                // Try save with error handling
+                const saveResult = window.GameSaveManager.save('players', players);
+                if (!saveResult) {
+                    throw new Error('Failed to save player data');
+                }
+                
+                // Verify save worked
+                const savedData = window.GameSaveManager.load('players');
+                console.log('Verified saved data:', savedData);
+                
+                return true;
+            } catch (error) {
+                console.error('Error saving player settings:', error);
+                showError('Error saving player settings. Please try again.');
+                return false;
+            }
+        }
+
+        function showError(message) {
+            const errorMessage = document.getElementById('setupErrorMessage');
+            errorMessage.textContent = message;
+            errorMessage.classList.add('visible');
+            setTimeout(() => errorMessage.classList.remove('visible'), 3000);
+        }
+
+        function validatePlayerNames() {
+            const inputs = document.querySelectorAll('.name-input');
+            const filledInputs = Array.from(inputs).filter(input => input.value.trim());
+            
+            if (filledInputs.length !== selectedPlayerCount) {
+                showError(`Please enter ${selectedPlayerCount} player name${selectedPlayerCount > 1 ? 's' : ''}`);
+                return false;
+            }
+            
+            const names = [];
+            const palettes = [];
+            filledInputs.forEach(input => {
+                names.push(input.value.trim());
+                palettes.push(input.dataset.palette);
+            });
+            
+            if (new Set(names).size !== names.length) {
+                showError('Player names must be unique');
+                return false;
+            }
+            
+            if (new Set(palettes).size !== palettes.length) {
+                showError('Each player must choose a different color');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function handleExistingPlayers() {
+            document.getElementById('statusMessage').textContent = 'Found existing players';
+            document.getElementById('playerRecovery').style.display = 'block';
+            
+            document.getElementById('continuePrevious').addEventListener('click', () => {
+                window.location.href = 'data-verification.html';
+            });
+
+            document.getElementById('startNew').addEventListener('click', () => {
+                window.GameSaveManager.clearAll();
+                startNewPlayerSetup();
+            });
+        }
+
+        function startNewPlayerSetup() {
+            document.getElementById('statusMessage').textContent = 'Setting up new players';
+            document.getElementById('playerRecovery').style.display = 'none';
+            document.getElementById('newPlayerSetup').style.display = 'block';
+            
+            if (!setupInitialized) {
+                initializePlayerSetup();
+                setupInitialized = true;
+            }
+        }
+
+        function initializePlayerSetup() {
+            // Set up player count buttons
+            document.querySelectorAll('.count-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.count-button').forEach(b => 
+                        b.classList.remove('selected'));
+                    button.classList.add('selected');
+                    selectedPlayerCount = parseInt(button.dataset.players);
+                    showPlayerDetailsEntry();
+                });
+            });
+
+            // Set up start game button
+            document.getElementById('startGame').addEventListener('click', () => {
+                console.log('Start game clicked');
+                if (validatePlayerNames()) {
+                    if (savePlayerSettings()) {
+                        console.log('Player settings saved successfully, redirecting to verification');
+                        window.location.href = 'data-verification.html';
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="setup-container">
+        <img src="Graphics/UC3.png" alt="Game Logo" class="logo-img">
+        
+        <div id="statusMessage" class="setup-prompt">
+            Checking for previous players...
+        </div>
+        
+        <div id="playerRecovery" class="setup-section" style="display: none;">
+            <div class="setup-prompt">Previous players found:</div>
+            <div class="button-container">
+                <button class="setup-button" id="continuePrevious">Continue with Previous Players</button>
+                <button class="setup-button" id="startNew">Set Up New Players</button>
+            </div>
+        </div>
+        
+        <div id="newPlayerSetup" class="setup-section" style="display: none;">
+            <div id="playerCountSelector">
+                <h2 class="setup-prompt">Choose number of players:</h2>
+                <div class="player-count">
+                    <button class="count-button" data-players="1">1 Player</button>
+                    <button class="count-button" data-players="2">2 Players</button>
+                    <button class="count-button" data-players="3">3 Players</button>
+                    <button class="count-button" data-players="4">4 Players</button>
+                </div>
+            </div>
+
+            <div id="playerDetailsEntry" style="display: none;">
+                <h2 class="setup-prompt">Enter player names and choose colors:</h2>
+                <div id="paletteSelectionGrid" class="palette-grid">
+                    <!-- Palette selections will be added here -->
+                </div>
+            </div>
+
+            <div id="setupErrorMessage" class="error-message"></div>
+            
+            <button id="startGame" class="setup-button" style="display: none;">
+                Start Game
+            </button>
+        </div>
+    </div>
+</body>
+</html>

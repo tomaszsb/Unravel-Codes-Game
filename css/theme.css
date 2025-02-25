@@ -1,0 +1,122 @@
+/* theme.css - Core theme variables and all forced colors handling */
+
+/* Base theme variables */
+:root {
+    /* Core colors */
+    --primary-color: #006B3F;
+    --primary-dark: #005232;
+    --error-color: #ff4444;
+    --background-color: #FFFFFF;
+    --text-color: #000000;
+    
+    /* Surface colors */
+    --surface-light: #f8f9fa;
+    --surface-lighter: #ffffff;
+    --border-light: #dee2e6;
+    --border-subtle: #eee;
+    --text-secondary: #666666;
+
+    /* Interactive states */
+    --hover-opacity: 0.9;
+    --disabled-opacity: 0.5;
+
+    /* Layout */
+    --border-radius: 8px;
+
+    /* Animation */
+    --transition-time: 0.3s;
+    
+    /* Spacing */
+    --gap-small: 0.25rem;
+    --gap-medium: 0.75rem;
+    --gap-large: 2rem;
+
+    /* Effects */
+    --overlay-bg: rgba(0, 0, 0, 0.5);
+    --shadow-light: rgba(0, 0, 0, 0.1);
+    --shadow-medium: rgba(0, 0, 0, 0.15);
+
+    /* Debug outlines - only visible during development */
+    --debug-red: rgba(255,0,0,0.1);
+    --debug-green: rgba(0,255,0,0.2);
+    --debug-blue: rgba(0,0,255,0.2);
+}
+
+/* Forced Colors Mode Support */
+@media (forced-colors: active) {
+    /* Core variable overrides */
+    :root {
+        --primary-color: ButtonText;
+        --primary-dark: ButtonText;
+        --error-color: Mark;
+        --background-color: Canvas;
+        --text-color: CanvasText;
+    }
+
+    /* Interactive Elements */
+    button,
+    .game-button,
+    .setup-button,
+    .count-button,
+    .action-button {
+        forced-color-adjust: none;
+        border: 1px solid ButtonText;
+        background: ButtonFace;
+        color: ButtonText;
+    }
+
+    /* Links */
+    a {
+        color: LinkText;
+    }
+
+    /* Game-specific elements */
+    .card,
+    .palette-card,
+    .game-area,
+    .player-area,
+    .verification-card,
+    .setup-container {
+        border: 1px solid ButtonText;
+        background: Canvas;
+        color: CanvasText;
+    }
+
+    /* Status indicators */
+    .error-message {
+        color: Mark;
+    }
+
+    .success-message {
+        color: MarkText;
+    }
+
+    /* Progress and game elements */
+    .progress-bar {
+        border: 1px solid ButtonText;
+    }
+
+    .progress-fill {
+        background: Highlight;
+    }
+
+    /* Board and game pieces */
+    .board-container line {
+        stroke: ButtonText;
+    }
+
+    .board-container circle {
+        fill: Canvas;
+        stroke: ButtonText;
+    }
+
+    /* Loading indicators */
+    .loading-spinner {
+        border-color: ButtonText;
+        border-top-color: Highlight;
+    }
+
+    .loading-message {
+        color: CanvasText;
+    }
+}

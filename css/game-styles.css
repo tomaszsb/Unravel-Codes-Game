@@ -1,0 +1,422 @@
+/* game-styles.css - Core game styling */
+
+/* Game Container */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Row Layout */
+.game-row {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Specific Row Styles */
+#mainGameRow {
+    flex: 0 1 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--gap-small);
+}
+
+/* Column Layout */
+.game-column {
+    flex: 1;
+    min-width: 0;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background-color: white;
+}
+
+.grid-cols-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+}
+
+.grid-cols-3 > div {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+}
+
+/* Adjust left column specific heights */
+.game-column:first-child {
+    display: flex;
+    flex-direction: column;
+}
+
+.game-column:first-child #space-info-root {
+    order: -1; /* Ensures SpaceInfo is always first */
+}
+
+.game-column:first-child #player-status-root {
+    order: 1;
+}
+
+/* Enhance table styles for better readability */
+.game-column table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 1rem;
+}
+
+.game-column th,
+.game-column td {
+    border: 1px solid var(--border-light);
+}
+
+.game-column th {
+    background-color: var(--surface-light);
+    font-weight: 600;
+}
+
+.game-column td {
+    background-color: white;
+}
+
+/* Make narrative text bold */
+.game-column .text-base.font-bold {
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+/* Component Root Elements */
+[id$="-root"] {
+    width: 100%;
+    overflow: auto;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Game Areas */
+.game-area {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Area Titles */
+.area-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: var(--gap-medium);
+    border-bottom: 2px solid var(--border-subtle);
+}
+
+/* Status Messages */
+.status-message {
+    margin-bottom: var(--gap-medium);
+    background-color: var(--surface-light);
+    border: 1px solid var(--border-light);
+    border-radius: 0.375rem;
+}
+
+/* Card Elements */
+.card-requirement,
+.available-path,
+.time-cost-section {
+    margin: 0.75rem 0;
+    background-color: var(--surface-light);
+    border: 1px solid var(--border-light);
+    border-radius: 0.375rem;
+}
+
+/* Progress Map */
+.board-container {
+    transform: scale(0.9);
+    transform-origin: center;
+}
+
+.board-container line {
+    stroke: var(--primary-color);
+    stroke-width: 2;
+}
+
+.board-container circle {
+    fill: var(--surface-lighter);
+    stroke: var(--primary-color);
+    stroke-width: 2;
+}
+
+#leaderboard-root {
+    background: var(--surface-lighter);
+    border: 1px solid black; /* Thin black border */
+    border-radius: 8px; /* Optional: Rounds corners */
+    padding: 16px; /* Adds spacing */
+    width: 90%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow */
+}
+
+/* Leaderboard */
+.leaderboard {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--gap-medium);
+}
+
+.leaderboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--gap-medium);
+    margin-bottom: var(--gap-medium);
+}
+
+.player-score {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.25rem;
+    font-weight: 600;
+}
+
+.player-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--gap-small);
+    margin-top: var(--gap-small);
+    border: 1px solid black; /* Thin black border */
+}
+
+/* Base button styles */
+.button-base,
+.game-button {
+    cursor: pointer;
+    border: none;
+    font-weight: 600;
+    background-color: var(--primary-color);
+    color: var(--background-color);
+    border-radius: 0.375rem;
+    transition: all 0.2s ease;
+}
+
+/* Additional game button styles */
+.game-button {
+    font-size: 1rem;
+    min-width: 100px;
+    box-shadow: 0 2px 4px var(--shadow-light);
+    display: inline-flex;
+    align-items: center;   /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+}
+
+.game-button:hover:not(:disabled) {
+    background-color: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px var(--shadow-medium);
+}
+
+.game-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Controls Row */
+#controlsRow {
+    display: flex;
+    justify-content: center;
+    gap: var(--gap-small);
+    position: static;
+    bottom: var(--gap-large); /* Add spacing from bottom */
+    left: 0;
+    right: 0;
+    background: var(--surface-lighter);
+    border: 1px solid black; /* Thin black border */
+    box-shadow: 0 -2px 10px var(--shadow-light);
+    border-radius: var(--border-radius); /* Add rounded corners */
+    margin: 0 var(--gap-medium); /* Add side margins */
+    margin-top: auto;  /* Push to bottom */
+    width: 90%;
+    align-items: center;  /* Center buttons vertically */
+}
+
+.button-group {
+    display: flex;
+    gap: var(--gap-medium);
+    align-items: center;  /* Center buttons vertically */
+}
+
+.button-group button {
+    color: white !important;
+    opacity: 1 !important;
+    display: flex;
+    gap: var(--gap-small);
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal and Instructions */
+#game-instructions-root {
+    visibility: hidden;  
+    opacity: 100;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 1200px;
+    background: var(--surface-lighter);
+    padding: var(--gap-large);
+    box-shadow: 0 4px 20px var(--shadow-medium);
+    /*z-index: 1000;*/
+    border-radius: 0.5rem;
+    border: 1px solid black; /* Thin black border */
+    /*transition: visibility 0s, opacity 0.3s ease;*/
+}
+
+#game-instructions-root.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--overlay-bg);
+    z-index: 900;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.3s, opacity 0.3s ease;
+}
+
+.modal-backdrop.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--surface-lighter);
+    z-index: 1000;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.3s, opacity 0.3s ease;
+}
+
+.modal.visible {
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.3s ease;
+}
+
+.modal.hidden {
+    display: none !important;
+}
+
+/* Game Log */
+.log-content {
+    background: var(--surface-dark);
+    border-radius: 0.375rem;
+}
+
+.log-entry {
+    border-bottom: 1px solid var(--border-subtle);
+    font-size: 1rem;
+}
+
+.log-entry:last-child {
+    border-bottom: none;
+}
+
+/* Error States */
+.error-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    text-align: center;
+    background-color: var(--surface-lighter);
+    box-shadow: 0 2px 8px var(--shadow-light);
+    border-radius: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+      #mainGameRow {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .button-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .game-button {
+        width: 100%;
+        margin: 0.25rem 0;
+    }
+    
+    #game-instructions-root {
+        width: 95%;
+        padding: var(--gap-medium);
+    }
+}
+
+/* Forced Colors Mode Support */
+@media (forced-colors: active) {
+    .game-button,
+    .setup-button,
+    .count-button {
+        border: 1px solid ButtonText;
+    }
+
+    .error-container,
+    .game-column,
+    .log-content {
+        border: 1px solid CanvasText;
+    }
+
+    .board-container line {
+        stroke: ButtonText;
+    }
+
+    .board-container circle {
+        stroke: ButtonText;
+        fill: Canvas;
+    }
+
+    .loading-spinner {
+        border-color: ButtonText;
+    }
+}
+
+/* End Game Screen */
+.end-game-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem auto;
+    max-width: 600px;
+    background: var(--surface-lighter);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px var(--shadow-light);
+}
+
+.end-game-screen button {
+    transition: all 0.3s ease;
+}
+
+.end-game-screen button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 8px var(--shadow-medium);
+}

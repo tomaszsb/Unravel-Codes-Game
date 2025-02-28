@@ -1,0 +1,66 @@
+// GameBoard.js - Simplified version to ensure loading works
+class GameBoard extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: true,
+            error: null
+        };
+        console.log('GameBoard constructor executed');
+    }
+    
+    componentDidMount() {
+        console.log('GameBoard component mounted');
+        this.setState({ loading: false });
+    }
+    
+    render() {
+        console.log('GameBoard render called');
+        if (this.state.loading) {
+            return React.createElement('div', null, 'Loading...');
+        }
+        
+        if (this.state.error) {
+            return React.createElement('div', null, 'Error: ' + this.state.error);
+        }
+        
+        return React.createElement('div', null, 'GameBoard loaded successfully!');
+    }
+}
+
+// Make GameBoard available globally - APPROACH 1
+window.GameBoard = GameBoard;
+console.log('GameBoard registered in window object - APPROACH 1');
+
+// Alternative registration - APPROACH 2
+try {
+    if (window.GameComponentRegistry) {
+        window.GameComponentRegistry.register('GameBoard', GameBoard);
+        console.log('GameBoard registered using ComponentRegistry - APPROACH 2');
+    }
+} catch (err) {
+    console.error('Failed to register with ComponentRegistry:', err);
+}
+
+// Direct assignment - APPROACH 3
+try {
+    Object.defineProperty(window, 'GameBoard', {
+        value: GameBoard,
+        writable: true,
+        enumerable: true,
+        configurable: true
+    });
+    console.log('GameBoard registered using Object.defineProperty - APPROACH 3');
+} catch (err) {
+    console.error('Failed to register with defineProperty:', err);
+}
+
+// Final check
+setTimeout(() => {
+    console.log('Final check - GameBoard availability:', {
+        direct: typeof GameBoard,
+        window: typeof window.GameBoard,
+        registry: window.GameComponentRegistry ? 
+            Boolean(window.GameComponentRegistry.components.GameBoard) : 'registry not available'
+    });
+}, 100);

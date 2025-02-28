@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Game Board">
+    <title>Game Board</title>
+    
+    <!-- CSS files -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/game-styles.css">
+
+    <!-- Load React -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <!-- Single root container for React -->
+    <div id="game-board-root"></div>
+
+    <!-- Load all required scripts -->
+    <!-- Core Systems -->
+    <script src="js/file-system.js"></script>
+    <script src="js/csv-parser.js"></script>
+    <script src="js/save-manager.js"></script>
+    <script src="js/game-data-manager.js"></script>
+    <script src="js/player-palettes.js"></script>
+    <script src="js/color-manager.js"></script>
+    <script src="js/player-manager.js"></script>
+    <script src="js/player-progress-manager.js"></script>
+
+    <!-- Legacy Components (still needed for compatibility) -->
+    <script src="js/components/leaderboard-component.js"></script>
+    <script src="js/components/progress-map-component.js"></script>
+    <script src="js/components/space-info-component.js"></script>
+    <script src="js/components/player-status-component.js"></script>
+    <script src="js/components/action-requirements-component.js"></script>
+    <script src="js/components/dice-prompt-component.js"></script>
+    <script src="js/components/dice-result-component.js"></script>
+    <script src="js/components/dice-system-component.js"></script>
+    <script src="js/components/game-instructions-component.js"></script>
+    <script src="js/components/performed-actions-component.js"></script>
+    <script src="js/components/move-selection-component.js"></script>
+    <script src="js/components/game-state-display-component.js"></script>
+
+    <!-- Refactored Components -->
+    <script src="js/components/ErrorScreen.js"></script>
+    <script src="js/components/LoadingScreen.js"></script>
+    <script src="js/components/GameModals.js"></script>
+    <script src="js/components/SingleMoveDisplay.js"></script>
+    <script src="js/components/MoveSelection.js"></script>
+    <script src="js/components/GameControls.js"></script>
+    <script src="js/components/RightColumn.js"></script>
+    <script src="js/components/MiddleColumn.js"></script>
+    <script src="js/components/LeftColumn.js"></script>
+    <script src="js/components/GameMainArea.js"></script>
+    <script src="js/components/GameHeader.js"></script>
+    <script src="js/components/GameEndScreen.js"></script>
+    <script src="js/components/GameBoard.js"></script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        console.log('=== Game Board Initialization Started ===');
+        try {
+            const gameRoot = document.getElementById('game-board-root');
+            if (!gameRoot) throw new Error('Game board root not found');
+            
+            ReactDOM.render(
+                React.createElement(GameBoard),
+                gameRoot
+            );
+        } catch (error) {
+            console.error('Game initialization failed:', error);
+            
+            // Display error on the page
+            const errorElement = document.createElement('div');
+            errorElement.className = 'error-container';
+            errorElement.innerHTML = `
+                <h2>Game Initialization Failed</h2>
+                <p class="error-message">${error.message}</p>
+                <button onclick="window.location.reload()">Retry</button>
+                <button onclick="window.location.href='player-setup.html'">Return to Setup</button>
+            `;
+            
+            document.body.appendChild(errorElement);
+        }
+    });
+    </script>
+</body>
+</html>

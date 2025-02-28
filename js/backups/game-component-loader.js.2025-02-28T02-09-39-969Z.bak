@@ -1,0 +1,112 @@
+// game-component-loader.js
+// A utility script to ensure components are properly loaded and available
+
+// Global component registry
+window.GameComponentRegistry = {
+    components: {},
+    register: function(name, component) {
+        console.log(`Registering component: ${name}`);
+        this.components[name] = component;
+        // Also add to window object for backward compatibility
+        window[name] = component;
+        return component;
+    },
+    get: function(name) {
+        return this.components[name] || window[name];
+    },
+    getAll: function() {
+        return Object.keys(this.components);
+    },
+    isRegistered: function(name) {
+        return this.components.hasOwnProperty(name) || (typeof window[name] === 'function');
+    }
+};
+
+// Component loader utility
+window.ComponentLoader = {
+    // Load a script and register it
+    loadComponent: function(src, componentName) {
+        return new Promise((resolve, reject) => {
+            console.log(`Loading component: ${componentName} from ${src}`);
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                // Check if component is registered after script load
+                if (window.GameComponentRegistry.isRegistered(componentName)) {
+                    console.log(`Component loaded successfully: ${componentName}`);
+                    resolve(window.GameComponentRegistry.get(componentName));
+                } else {
+                    // Try to find it in window
+                    if (typeof window[componentName] === 'function') {
+                        console.log(`Component found in window: ${componentName}`);
+                        window.GameComponentRegistry.register(componentName, window[componentName]);
+                        resolve(window[componentName]);
+                    } else {
+                        console.error(`Component not found after loading: ${componentName}`);
+                        reject(new Error(`Component not found: ${componentName}`));
+                    }
+                }
+            };
+            script.onerror = () => {
+                console.error(`Failed to load component: ${componentName}`);
+                reject(new Error(`Failed to load: ${componentName}`));
+            };
+            document.head.appendChild(script);
+        });
+    },
+    
+    // Verify that a component is loaded and ready to use
+    verifyComponent: function(componentName) {
+        return new Promise((resolve, reject) => {
+            const maxAttempts = 10;
+            let attempts = 0;
+            
+            const checkComponent = () => {
+                attempts++;
+                console.log(`Verifying component (attempt ${attempts}): ${componentName}`);
+                
+                if (window.GameComponentRegistry.isRegistered(componentName)) {
+                    console.log(`Component verified: ${componentName}`);
+                    resolve(window.GameComponentRegistry.get(componentName));
+                    return;
+                }
+                
+                // Check if in window but not in registry
+                if (typeof window[componentName] === 'function') {
+                    console.log(`Component found in window: ${componentName}`);
+                    window.GameComponentRegistry.register(componentName, window[componentName]);
+                    resolve(window[componentName]);
+                    return;
+                }
+                
+                if (attempts >= maxAttempts) {
+                    console.error(`Component verification failed after ${attempts} attempts: ${componentName}`);
+                    reject(new Error(`Component not found after ${attempts} attempts: ${componentName}`));
+                    return;
+                }
+                
+                // Try again after a short delay
+                setTimeout(checkComponent, 100);
+            };
+            
+            checkComponent();
+        });
+    }
+};
+
+// Register our main GameBoard component explicitly
+if (typeof GameBoard === 'function') {
+    window.GameComponentRegistry.register('GameBoard', GameBoard);
+}
+
+// Add event listener to check components once DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Initializing component loader');
+    
+    // Check for our main game component
+    window.ComponentLoader.verifyComponent('GameBoard').then(() => {
+        console.log('GameBoard component verified and ready');
+    }).catch(error => {
+        console.error('GameBoard verification failed:', error);
+    });
+});

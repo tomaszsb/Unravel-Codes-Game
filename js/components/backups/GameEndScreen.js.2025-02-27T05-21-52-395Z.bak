@@ -1,0 +1,75 @@
+import React from 'react';
+
+function GameEndScreen({ finalRankings }) {
+    if (!finalRankings || finalRankings.length === 0) {
+        return (
+            <div className="game-end-screen">
+                <h2>Game Complete</h2>
+                <p>No ranking data available.</p>
+                <button 
+                    className="new-game-button"
+                    onClick={() => window.location.href = 'player-setup.html'}
+                >
+                    Start New Game
+                </button>
+            </div>
+        );
+    }
+    
+    return (
+        <div className="game-end-screen">
+            <h2>Game Complete!</h2>
+            
+            <div className="final-rankings">
+                <h3>Final Rankings</h3>
+                <table className="rankings-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Player</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {finalRankings.map(player => (
+                            <tr key={player.name}>
+                                <td>{player.rank}</td>
+                                <td style={{ color: player.color }}>{player.name}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div className="game-summary">
+                <h3>Game Summary</h3>
+                <div className="summary-stats">
+                    <p><strong>Players:</strong> {finalRankings.length}</p>
+                    <p><strong>Winner:</strong> <span style={{ color: finalRankings[0]?.color }}>{finalRankings[0]?.name}</span></p>
+                    
+                    {/* Additional stats could be added here */}
+                </div>
+            </div>
+            
+            <div className="end-game-controls">
+                <button 
+                    className="new-game-button"
+                    onClick={() => window.location.href = 'player-setup.html'}
+                >
+                    Start New Game
+                </button>
+                
+                <button 
+                    className="view-log-button"
+                    onClick={() => {
+                        // Display game log
+                        // Implementation would depend on your logging system
+                    }}
+                >
+                    View Full Game Log
+                </button>
+            </div>
+        </div>
+    );
+}
+
+export default GameEndScreen;

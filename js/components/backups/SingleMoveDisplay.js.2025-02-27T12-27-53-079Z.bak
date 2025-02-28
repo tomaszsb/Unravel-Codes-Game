@@ -1,0 +1,58 @@
+// SingleMoveDisplay.js
+const SingleMoveDisplay = ({ move }) => {
+    if (!move) return null;
+    
+    // Get move details from GameDataManager
+    const moveData = window.GameDataManager.getSpaceData(move);
+    
+    return React.createElement('div', { className: 'single-move-display' }, [
+        React.createElement('h4', {
+            key: 'title',
+            className: 'move-title'
+        }, 'Selected Move'),
+        React.createElement('div', {
+            key: 'card',
+            className: 'move-card'
+        }, [
+            React.createElement('h5', { key: 'name' }, move),
+            moveData && React.createElement('div', {
+                key: 'details',
+                className: 'move-details'
+            }, [
+                React.createElement('p', { key: 'type' }, [
+                    React.createElement('strong', null, 'Type:'),
+                    ` ${moveData['Visit Type'] || 'Standard Move'}`
+                ]),
+                React.createElement('p', { key: 'phase' }, [
+                    React.createElement('strong', null, 'Phase:'),
+                    ` ${moveData.Phase || 'N/A'}`
+                ]),
+                moveData.Description && React.createElement('div', {
+                    key: 'description',
+                    className: 'move-description'
+                }, [
+                    React.createElement('p', { key: 'label' }, [
+                        React.createElement('strong', null, 'Description:')
+                    ]),
+                    React.createElement('p', { key: 'text' }, moveData.Description)
+                ])
+            ]),
+            React.createElement('div', {
+                key: 'status',
+                className: 'move-status'
+            }, [
+                React.createElement('span', {
+                    key: 'icon',
+                    className: 'status-icon'
+                }, '✓'),
+                React.createElement('span', {
+                    key: 'text',
+                    className: 'status-text'
+                }, 'Move selected')
+            ])
+        ])
+    ]);
+};
+
+// Make SingleMoveDisplay available globally
+window.SingleMoveDisplay = SingleMoveDisplay;

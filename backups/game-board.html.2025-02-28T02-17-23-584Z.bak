@@ -28,10 +28,6 @@
         <div style="color: white; font-size: 24px; margin-bottom: 20px;">Initializing Game Systems</div>
         <div class="loading-spinner" style="width: 50px; height: 50px; border: 5px solid #f3f3f3; border-top: 5px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite;"></div>
         <div id="loading-status" style="color: white; margin-top: 20px; font-size: 16px;">Loading scripts...</div>
-        <div id="loading-progress" style="width: 80%; max-width: 400px; background-color: #444; height: 20px; margin-top: 20px; position: relative;">
-            <div id="progress-bar" style="width: 0%; height: 100%; background-color: #3498db; transition: width 0.3s;"></div>
-            <div id="progress-text" style="position: absolute; top: 0; left: 0; width: 100%; text-align: center; color: white; line-height: 20px; font-size: 12px;">0%</div>
-        </div>
         <div id="init-error" style="color: #ff6b6b; margin-top: 20px; max-width: 80%; text-align: center; display: none;">
             <div id="error-message"></div>
             <button id="retry-button" style="background: #3498db; border: none; color: white; padding: 10px 20px; margin-top: 15px; border-radius: 4px; cursor: pointer;">Retry</button>
@@ -48,22 +44,6 @@
 
     <!-- Load using a script that handles sequential loading -->
     <script>
-    // Update progress bar
-    function updateProgress(percent, message) {
-        const progressBar = document.getElementById('progress-bar');
-        const progressText = document.getElementById('progress-text');
-        const statusText = document.getElementById('loading-status');
-        
-        if (progressBar && progressText) {
-            progressBar.style.width = `${percent}%`;
-            progressText.textContent = `${Math.round(percent)}%`;
-        }
-        
-        if (message && statusText) {
-            statusText.textContent = message;
-        }
-    }
-    
     // Log status with timestamp for debugging
     function logStatus(message) {
         const now = new Date();
@@ -113,7 +93,7 @@
             script.onload = () => {
                 logStatus(`✓ Script loaded: ${src}`);
                 // Wait a short time to ensure script is fully executed
-                setTimeout(resolve, 50);
+                setTimeout(resolve, 20);
             };
             script.onerror = (error) => {
                 logStatus(`✗ Script loading error: ${src}`);
@@ -126,95 +106,60 @@
     // Inline script loading to ensure correct order
     async function loadGameScripts() {
         try {
-            const totalScripts = 26; // Total number of scripts to load
-            let loadedScripts = 0;
-            
-            function updateLoadProgress(script) {
-                loadedScripts++;
-                const percent = (loadedScripts / totalScripts) * 100;
-                updateProgress(percent, `Loading ${script}...`);
-            }
-            
             logStatus('Starting script loading sequence');
             
             // Core systems first
-            updateLoadProgress('file-system.js');
             await loadScript('js/file-system.js');
-            
-            updateLoadProgress('csv-parser.js');
             await loadScript('js/csv-parser.js');
-            
-            updateLoadProgress('save-manager.js');
             await loadScript('js/save-manager.js');
-            
-            updateLoadProgress('game-data-manager.js');
             await loadScript('js/game-data-manager.js');
-            
-            updateLoadProgress('player-palettes.js');
             await loadScript('js/player-palettes.js');
-            
-            updateLoadProgress('color-manager.js');
             await loadScript('js/color-manager.js');
-            
-            updateLoadProgress('player-manager.js');
             await loadScript('js/player-manager.js');
-            
-            updateLoadProgress('player-progress-manager.js');
             await loadScript('js/player-progress-manager.js');
             
-            // Load our system utilities
-            updateLoadProgress('game-system-check.js');
-            await loadScript('js/game-system-check.js');
-            
-            updateLoadProgress('game-system-initializer.js');
+            // Load our system initializer
             await loadScript('js/game-system-initializer.js');
             
             // Wait a moment to ensure core systems are initialized
             await new Promise(resolve => setTimeout(resolve, 200));
             
-            // Legacy components
-            const legacyComponents = [
-                'leaderboard-component.js',
-                'progress-map-component.js',
-                'space-info-component.js',
-                'player-status-component.js',
-                'action-requirements-component.js',
-                'dice-prompt-component.js',
-                'dice-result-component.js',
-                'dice-system-component.js',
-                'game-instructions-component.js',
-                'performed-actions-component.js',
-                'move-selection-component.js',
-                'game-state-display-component.js'
+            // Create component config for use with ComponentLoader
+            const componentConfigs = [
+                { name: 'LeaderBoard', src: 'js/components/leaderboard-component.js' },
+                { name: 'ProgressMap', src: 'js/components/progress-map-component.js' },
+                { name: 'SpaceInfo', src: 'js/components/space-info-component.js' },
+                { name: 'PlayerStatus', src: 'js/components/player-status-component.js' },
+                { name: 'ActionRequirements', src: 'js/components/action-requirements-component.js' },
+                { name: 'DicePrompt', src: 'js/components/dice-prompt-component.js' },
+                { name: 'DiceResult', src: 'js/components/dice-result-component.js' },
+                { name: 'DiceSystem', src: 'js/components/dice-system-component.js' },
+                { name: 'GameInstructions', src: 'js/components/game-instructions-component.js' },
+                { name: 'PerformedActions', src: 'js/components/performed-actions-component.js' },
+                { name: 'MoveSelectionComponent', src: 'js/components/move-selection-component.js' },
+                { name: 'GameStateDisplay', src: 'js/components/game-state-display-component.js' }
             ];
             
-            for (const component of legacyComponents) {
-                updateLoadProgress(component);
-                await loadScript(`js/components/${component}`);
-                await new Promise(resolve => setTimeout(resolve, 20)); // Small pause between loads
+            // Load all legacy components
+            for (const config of componentConfigs) {
+                await loadScript(config.src);
+                await new Promise(resolve => setTimeout(resolve, 50)); // Small pause between loads
             }
             
             // Load refactored components next with a bigger pause before
-            await new Promise(resolve => setTimeout(resolve, 200));
+            await new Promise(resolve => setTimeout(resolve, 300));
             
-            updateLoadProgress('SingleMoveDisplay.js');
             await loadScript('js/components/SingleMoveDisplay.js');
-            
-            updateLoadProgress('MoveSelection.js');
             await loadScript('js/components/MoveSelection.js');
             
             // Wait a moment to ensure refactored components are loaded
-            await new Promise(resolve => setTimeout(resolve, 200));
+            await new Promise(resolve => setTimeout(resolve, 300));
             
             // Load GameBoard component last
-            updateLoadProgress('GameBoard.js');
             await loadScript('js/components/GameBoard.js');
             
             // Wait to ensure it's loaded
-            await new Promise(resolve => setTimeout(resolve, 200));
-            
-            // Final progress update
-            updateProgress(100, 'Script loading complete');
+            await new Promise(resolve => setTimeout(resolve, 300));
             
             // Final check for GameBoard
             logStatus(`GameBoard availability after loading: ${typeof window.GameBoard}`);
@@ -235,35 +180,11 @@
     async function initializeGameSystems() {
         try {
             logStatus('Initializing game systems...');
-            updateProgress(0, 'Checking system status...');
-            
-            // First check if systems are already ready
-            if (window.GameSystemCheck?.areSystemsReady()) {
-                logStatus('Game systems already initialized');
-                updateProgress(100, 'Game systems ready');
-                return true;
-            }
-            
-            // Try to repair systems if they're not ready
-            updateProgress(25, 'Attempting system repair...');
-            try {
-                await window.GameSystemCheck.repairSystems();
-                updateProgress(75, 'System repair successful');
-                logStatus('System repair successful');
-                return true;
-            } catch (repairError) {
-                logStatus(`System repair failed: ${repairError.message}`);
-                
-                // Last resort: try initialization from scratch
-                updateProgress(50, 'Attempting initialization from scratch...');
-                await window.GameSystemInitializer.initializeWithRetries(2);
-                updateProgress(100, 'Game systems initialized successfully');
-                logStatus('Game systems initialized successfully');
-                return true;
-            }
+            await window.GameSystemInitializer.initializeWithRetries(3);
+            logStatus('Game systems initialized successfully');
+            return true;
         } catch (error) {
             logStatus(`Game system initialization failed: ${error.message}`);
-            updateProgress(100, 'Initialization failed');
             throw error;
         }
     }

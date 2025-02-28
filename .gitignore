@@ -1,0 +1,7 @@
+# Windows system files
+desktop.ini
+Thumbs.db
+ehthumbs.db
+$RECYCLE.BIN/
+
+find . -name "desktop.ini" -type f -delete

@@ -1,0 +1,53 @@
+import React from 'react';
+
+function GameControls({
+    onEndTurn,
+    onDiceRoll,
+    onToggleInstructions,
+    onToggleLog,
+    hasRolled,
+    canEndTurn,
+    gameState
+}) {
+    if (!gameState) return null;
+    
+    return (
+        <div className="game-controls">
+            <div className="primary-controls">
+                <button
+                    className="dice-roll-button"
+                    onClick={onDiceRoll}
+                    disabled={hasRolled}
+                >
+                    Roll Dice
+                </button>
+                
+                <button
+                    className="end-turn-button"
+                    onClick={onEndTurn}
+                    disabled={!canEndTurn}
+                >
+                    End Turn
+                </button>
+            </div>
+            
+            <div className="secondary-controls">
+                <button 
+                    className="instructions-button"
+                    onClick={onToggleInstructions}
+                >
+                    Game Instructions
+                </button>
+                
+                <button 
+                    className="log-button"
+                    onClick={onToggleLog}
+                >
+                    Action Log
+                </button>
+            </div>
+        </div>
+    );
+}
+
+export default GameControls;

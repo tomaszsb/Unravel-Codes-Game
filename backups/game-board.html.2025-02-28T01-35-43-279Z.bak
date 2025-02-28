@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Game Board">
+    <title>Game Board</title>
+    
+    <!-- CSS files -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/game-styles.css">
+
+    <!-- Load React -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <!-- Root container for React -->
+    <div id="game-board-root"></div>
+    <div id="status-display" style="padding: 20px; margin: 20px; border: 1px solid #ccc; background: #f5f5f5;"></div>
+
+    <!-- Load core dependencies first -->
+    <script src="js/file-system.js"></script>
+    <script src="js/csv-parser.js"></script>
+    <script src="js/save-manager.js"></script>
+    <script src="js/game-data-manager.js"></script>
+    <script src="js/player-palettes.js"></script>
+    <script src="js/color-manager.js"></script>
+    <script src="js/player-manager.js"></script>
+    <script src="js/player-progress-manager.js"></script>
+
+    <!-- Simplified initialization - focus on loading GameBoard first -->
+    <script>
+    // Log loaded scripts to track progress
+    function logStatus(message) {
+        console.log(message);
+        const statusDisplay = document.getElementById('status-display');
+        if (statusDisplay) {
+            const entry = document.createElement('div');
+            entry.textContent = message;
+            statusDisplay.appendChild(entry);
+        }
+    }
+    
+    // Load a single script
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            logStatus(`Loading script: ${src}`);
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                logStatus(`✓ Script loaded: ${src}`);
+                resolve();
+            };
+            script.onerror = (error) => {
+                logStatus(`✗ Script loading error: ${src}`);
+                reject(error);
+            };
+            document.head.appendChild(script);
+        });
+    }
+    
+    // Main initialization
+    document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            logStatus('=== Game Board Initialization Started ===');
+
+            // Load GameBoard component directly
+            await loadScript('js/components/GameBoard.js');
+            
+            // Check if GameBoard is available
+            logStatus(`GameBoard availability: ${typeof window.GameBoard}`);
+            
+            if (typeof window.GameBoard !== 'function') {
+                throw new Error('GameBoard component not loaded correctly');
+            }
+            
+            // Try rendering the GameBoard component
+            logStatus('Rendering GameBoard component...');
+            ReactDOM.render(
+                React.createElement(window.GameBoard),
+                document.getElementById('game-board-root')
+            );
+            
+            logStatus('=== Game Board Initialization Complete ===');
+        } catch (error) {
+            logStatus(`ERROR: ${error.message}`);
+            console.error('Game initialization failed:', error);
+            
+            // Display error on the page
+            const errorElement = document.createElement('div');
+            errorElement.className = 'error-container';
+            errorElement.innerHTML = `
+                <h2>Game Initialization Failed</h2>
+                <p class="error-message">${error.message}</p>
+                <button onclick="window.location.reload()">Retry</button>
+                <button onclick="window.location.href='player-setup.html'">Return to Setup</button>
+            `;
+            
+            document.body.appendChild(errorElement);
+        }
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+import React from 'react';
+
+function ErrorScreen({ error }) {
+    return (
+        <div className="error-screen">
+            <h2>Error</h2>
+            <p className="error-message">{error}</p>
+            <div className="error-actions">
+                <button 
+                    onClick={() => window.location.reload()}
+                    className="retry-button"
+                >
+                    Retry
+                </button>
+                <button 
+                    onClick={() => window.location.href = 'player-setup.html'}
+                    className="setup-button"
+                >
+                    Return to Setup
+                </button>
+            </div>
+        </div>
+    );
+}
+
+export default ErrorScreen;

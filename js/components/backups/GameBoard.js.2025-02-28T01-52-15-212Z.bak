@@ -1,0 +1,51 @@
+// GameBoard.js - Simplified for testing loading
+// This version is just to test loading and will be replaced with full functionality
+
+console.log('GameBoard.js is being executed');
+
+// Define the GameBoard component
+class GameBoard extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: true,
+            error: null
+        };
+        console.log('GameBoard constructor executed');
+    }
+    
+    componentDidMount() {
+        console.log('GameBoard component mounted');
+        this.setState({ loading: false });
+    }
+    
+    render() {
+        console.log('GameBoard render called');
+        if (this.state.loading) {
+            return React.createElement('div', null, 'Loading...');
+        }
+        
+        if (this.state.error) {
+            return React.createElement('div', null, 'Error: ' + this.state.error);
+        }
+        
+        return React.createElement('div', null, [
+            React.createElement('h1', { key: 'title' }, 'GameBoard loaded successfully!'),
+            React.createElement('p', { key: 'info' }, 'This is a test version of the GameBoard component')
+        ]);
+    }
+}
+
+// Register with window object immediately
+window.GameBoard = GameBoard;
+console.log('GameBoard has been registered in window object, type is: ' + typeof window.GameBoard);
+
+// For debugging - add a global variable that's easy to check
+window.GAMEBOARD_LOADED = true;
+console.log('GAMEBOARD_LOADED flag set to true');
+
+// Export explicitly as fallback
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { GameBoard };
+    console.log('GameBoard exported as module');
+}

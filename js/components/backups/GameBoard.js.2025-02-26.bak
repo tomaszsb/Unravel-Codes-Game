@@ -1,0 +1,61 @@
+// GameBoard component - Updated with additional features
+class GameBoard {
+  constructor(config = {}) {
+    this.gameState = 'initial';
+    this.players = [];
+    this.config = {
+      boardSize: 'medium',
+      difficulty: 'normal',
+      ...config
+    };
+    this.turnNumber = 0;
+  }
+  
+  initialize() {
+    console.log('Game board initialized with config:', this.config);
+    return this;
+  }
+  
+  addPlayer(player) {
+    this.players.push(player);
+    console.log(`Player ${player.name} added to game board`);
+    return this;
+  }
+  
+  removePlayer(playerId) {
+    const initialCount = this.players.length;
+    this.players = this.players.filter(p => p.id !== playerId);
+    return initialCount !== this.players.length;
+  }
+  
+  startGame() {
+    if (this.players.length > 0) {
+      this.gameState = 'active';
+      this.turnNumber = 1;
+      console.log('Game started with', this.players.length, 'players');
+      return true;
+    }
+    console.log('Cannot start game: No players added');
+    return false;
+  }
+  
+  nextTurn() {
+    if (this.gameState !== 'active') {
+      return false;
+    }
+    this.turnNumber++;
+    console.log(`Starting turn ${this.turnNumber}`);
+    return true;
+  }
+  
+  endGame() {
+    this.gameState = 'completed';
+    console.log(`Game ended after ${this.turnNumber} turns`);
+    return {
+      turns: this.turnNumber,
+      players: this.players.length
+    };
+  }
+}
+
+module.exports = GameBoard;

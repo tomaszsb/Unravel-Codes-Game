@@ -1,0 +1,83 @@
+import React from 'react';
+
+// Move option component
+function MoveOption({ move, category, onSelect }) {
+    // Get move details from GameDataManager if available
+    const moveData = window.GameDataManager.getSpaceData(move);
+    
+    return (
+        <div 
+            className={`move-option ${category.toLowerCase()}`}
+            onClick={onSelect}
+        >
+            <div className="move-name">{move}</div>
+            {moveData && (
+                <div className="move-info">
+                    <div className="move-type">{moveData['Visit Type'] || 'Move'}</div>
+                    {moveData.Description && (
+                        <div className="move-description">{moveData.Description}</div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+}
+
+function MoveSelection({ moves, onSelect }) {
+    if (!moves || moves.length === 0) {
+        return <p>No moves available.</p>;
+    }
+    
+    // Move categorization
+    const categories = {
+        FINANCIAL: ['FUND', 'SCOPE'],
+        ARCHITECTURE: ['ARCH'],
+        REGULATORY: ['REG', 'DOB'],
+        PLANNING: ['PLAN'],
+        EXECUTION: ['EXEC', 'BUILD'],
+        CLOSING: ['CLOSE', 'FINISH']
+    };
+    
+    // Helper function to determine category for a move
+    const getCategory = (move) => {
+        for (const [category, prefixes] of Object.entries(categories)) {
+            if (prefixes.some(prefix => move.startsWith(prefix))) {
+                return category;
+            }
+        }
+        return 'OTHER';
+    };
+    
+    // Group moves by category
+    const movesByCategory = {};
+    
+    moves.forEach(move => {
+        const category = getCategory(move);
+        if (!movesByCategory[category]) {
+            movesByCategory[category] = [];
+        }
+        movesByCategory[category].push(move);
+    });
+    
+    return (
+        <div className="move-selection">
+            {Object.entries(movesByCategory).map(([category, categoryMoves]) => (
+                <div key={category} className="move-category">
+                    <h4>{category}</h4>
+                    <div className="move-options">
+                        {categoryMoves.map(move => (
+                            <MoveOption
+                                key={move}
+                                move={move}
+                                category={category}
+                                onSelect={() => onSelect(move)}
+                            />
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+export default MoveSelection;

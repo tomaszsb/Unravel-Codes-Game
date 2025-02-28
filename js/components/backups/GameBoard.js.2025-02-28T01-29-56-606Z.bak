@@ -1,0 +1,234 @@
+                    key: 'spinner',
+                    className: 'loading-spinner'
+                }),
+                React.createElement('div', {
+                    key: 'message',
+                    className: 'loading-message'
+                }, 'Loading game board...'),
+                React.createElement('div', {
+                    key: 'status',
+                    className: 'loading-status'
+                }, 'Initializing game components and loading saved state...')
+            ]);
+        }
+    
+        // Error screen
+        if (error) {
+            return React.createElement('div', {
+                className: 'error-container'
+            }, [
+                React.createElement('h2', {
+                    key: 'title',
+                    className: 'text-xl font-bold mb-4'
+                }, 'Game Initialization Failed'),
+                React.createElement('p', {
+                    key: 'message',
+                    className: 'text-red-600 mb-4'
+                }, error),
+                React.createElement('button', {
+                    key: 'button',
+                    onClick: () => window.location.href = 'player-setup.html',
+                    className: 'game-button mt-4'
+                }, 'Return to Setup')
+            ]);
+        }
+    
+        // End game screen
+        if (showEndGame) {
+            return React.createElement('div', {
+                className: 'end-game-screen'
+            }, [
+                // Victory banner
+                React.createElement('h1', {
+                    key: 'title',
+                    className: 'text-4xl font-bold mb-8 text-center'
+                }, 'Game Complete!'),
+    
+                // LeaderBoard at end game
+                React.createElement(window.LeaderBoard, {
+                    key: 'leaderboard'
+                }),
+                
+                // Winner announcement
+                this.renderWinnerSection(),
+    
+                // New Game Button
+                React.createElement('button', {
+                    key: 'new-game',
+                    onClick: () => window.location.href = 'player-setup.html',
+                    className: 'game-button text-xl px-8 py-4'
+                }, 'Start New Game')
+            ]);
+        }
+        
+        // Main game layout
+        return React.createElement('div', {
+            ref: this.containerRef,
+            className: 'game-container'
+        }, [
+            // Leaderboard Row
+            React.createElement('div', {
+                key: 'leaderboard-row',
+                className: 'game-row'
+            }, React.createElement(window.LeaderBoard)),
+    
+            // Progress Map Row
+            React.createElement('div', {
+                key: 'progress-row',
+                className: 'game-row'
+            }, React.createElement(window.ProgressMap)),
+    
+            // Main Game Area - Three Columns
+            React.createElement('div', {
+                key: 'main-game-row',
+                className: 'game-row grid grid-cols-3 gap-4'
+            }, [
+                // Left Column - Space Info
+                React.createElement('div', {
+                    key: 'left-column',
+                    className: 'game-column'
+                }, [
+                    React.createElement(window.SpaceInfo),
+                    React.createElement(window.PlayerStatus)
+                ]),
+    
+                // Middle Column - Actions and Moves
+                React.createElement('div', {
+                    key: 'middle-column',
+                    className: 'game-column'
+                }, [
+                    React.createElement(window.ActionRequirements),
+                    // Only show moves section if we have moves
+                    availableMoves.length > 0 && React.createElement('div', {
+                        key: 'moves-container',
+                        className: 'bg-white rounded-lg shadow-sm p-4'
+                    }, 
+                        availableMoves.length === 1 ? 
+                        // Single move display
+                        React.createElement('div', {
+                            className: 'text-lg'
+                        }, [
+                            React.createElement('h3', {
+                                key: 'title',
+                                className: 'font-bold mb-2'
+                            }, '🎯 Next Move'),
+                            React.createElement('p', {
+                                key: 'move',
+                                className: 'text-base'
+                            }, availableMoves[0])
+                        ]) 
+                        : 
+                        // Multiple moves selection
+                        React.createElement(window.MoveSelection, {
+                            moves: availableMoves,
+                            onSelect: this.handleMoveSelect,
+                            selectedMove: selectedMove
+                        })
+                    ),
+                    React.createElement(window.DiceSystem)
+                ]),
+    
+                // Right Column - Game State
+                React.createElement('div', {
+                    key: 'right-column',
+                    className: 'game-column'
+                }, [
+                    React.createElement(window.DiceResult),
+                    React.createElement(window.GameStateDisplay)
+                ])
+            ]),
+    
+            // Controls Row
+            React.createElement('div', {
+                key: 'controls-row',
+                className: 'game-row'
+            }, React.createElement('div', {
+                className: 'button-group'
+            }, [
+                React.createElement('button', {
+                    key: 'end-turn',
+                    className: 'game-button',
+                    onClick: this.handleEndTurn,
+                    disabled: !currentPlayer
+                }, 'End Turn'),
+                React.createElement('button', {
+                    key: 'negotiate',
+                    className: 'game-button',
+                    onClick: this.handleNegotiate,
+                    disabled: !currentPlayer
+                }, 'Negotiate'),
+                React.createElement('button', {
+                    key: 'instructions',
+                    className: 'game-button',
+                    onClick: this.toggleInstructions
+                }, 'Game Instructions'),
+                React.createElement('button', {
+                    key: 'log',
+                    className: 'game-button',
+                    onClick: this.toggleLog
+                }, 'Game Log')
+            ])),
+    
+            // Modals
+            showInstructions && React.createElement('div', {
+                key: 'instructions-modal',
+                className: 'modal visible'
+            }, React.createElement(window.GameInstructions)),
+    
+            showLog && React.createElement('div', {
+                key: 'log-modal',
+                className: 'modal visible'
+            }, [
+                React.createElement('h2', {
+                    key: 'title'
+                }, 'Game Log'),
+                React.createElement('div', {
+                    key: 'content',
+                    className: 'log-content'
+                })
+            ])
+        ]);
+    }
+    
+    // Add helper method for winner section
+    renderWinnerSection = () => {
+        const rankings = this.getFinalRankings();
+        if (!rankings?.length) return null;
+
+        return React.createElement('div', {
+            key: 'winner',
+            className: 'mb-8 text-center'
+        }, [
+            React.createElement('h2', {
+                key: 'winner-title',
+                className: 'text-2xl font-semibold'
+            }, 'Winner:'),
+            React.createElement('p', {
+                key: 'winner-name',
+                className: 'text-3xl font-bold mt-2'
+            }, rankings[0].name)
+        ]);
+    };
+}
+
+// Ensure GameBoard is available in the global window object
+window.GameBoard = GameBoard;
+
+// Add debug logging
+console.log('GameBoard component registered in window object', typeof window.GameBoard);
+
+// Alternative registration method (for older browsers)
+if (typeof window.GameBoard !== 'function') {
+    try {
+        console.log('Using alternative method to register GameBoard');
+        Object.defineProperty(window, 'GameBoard', {
+            value: GameBoard,
+            writable: false,
+            enumerable: true,
+            configurable: true
+        });
+        console.log('Alternative registration complete', typeof window.GameBoard);
+    } catch (err) {
+        console.error('Failed to register GameBoard in window:', err);
+    }
+}

@@ -1,0 +1,28 @@
+// GameBoard component
+class GameBoard {
+  constructor() {
+    this.gameState = 'initial';
+    this.players = [];
+  }
+  
+  initialize() {
+    console.log('Game board initialized');
+  }
+  
+  addPlayer(player) {
+    this.players.push(player);
+    console.log(`Player ${player.name} added to game board`);
+  }
+  
+  startGame() {
+    if (this.players.length > 0) {
+      this.gameState = 'active';
+      console.log('Game started with', this.players.length, 'players');
+      return true;
+    }
+    console.log('Cannot start game: No players added');
+    return false;
+  }
+}
+
+module.exports = GameBoard;

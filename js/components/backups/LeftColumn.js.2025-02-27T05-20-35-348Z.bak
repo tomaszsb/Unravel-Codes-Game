@@ -1,0 +1,44 @@
+import React from 'react';
+
+function LeftColumn({ currentPlayer, gameState }) {
+    if (!currentPlayer || !gameState) return null;
+    
+    const currentSpace = window.PlayerProgressManager.getPlayerPosition(currentPlayer.name);
+    const spaceData = window.GameDataManager.getSpaceData(currentSpace);
+    
+    return (
+        <div className="left-column">
+            <div className="space-info">
+                <h3>Current Space</h3>
+                <div className="space-card">
+                    <h4>{spaceData?.['Space Name'] || currentSpace}</h4>
+                    <div className="space-details">
+                        <p><strong>Phase:</strong> {spaceData?.Phase || 'N/A'}</p>
+                        <p><strong>Visit Type:</strong> {spaceData?.['Visit Type'] || 'N/A'}</p>
+                        {spaceData?.Description && (
+                            <p className="space-description">{spaceData.Description}</p>
+                        )}
+                    </div>
+                </div>
+            </div>
+            
+            <div className="player-status">
+                <h3>Player Status</h3>
+                <div className="player-card" style={{ borderColor: currentPlayer.color }}>
+                    <h4 style={{ color: currentPlayer.color }}>{currentPlayer.name}</h4>
+                    <div className="player-stats">
+                        <p><strong>Position:</strong> {currentSpace}</p>
+                        <p><strong>Turn:</strong> {gameState.currentPlayerIndex + 1}</p>
+                        
+                        {/* Display player-specific stats if available */}
+                        {currentPlayer.stats && Object.entries(currentPlayer.stats).map(([key, value]) => (
+                            <p key={key}><strong>{key}:</strong> {value}</p>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default LeftColumn;

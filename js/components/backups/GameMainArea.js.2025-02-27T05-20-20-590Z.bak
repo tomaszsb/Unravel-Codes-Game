@@ -1,0 +1,45 @@
+import React from 'react';
+import LeftColumn from './LeftColumn';
+import MiddleColumn from './MiddleColumn';
+import RightColumn from './RightColumn';
+
+function GameMainArea({
+    gameState,
+    currentPlayer,
+    availableMoves,
+    selectedMove,
+    onMoveSelect,
+    diceResult,
+    hasRolled,
+    rollsRequired,
+    rollsCompleted
+}) {
+    if (!gameState || !currentPlayer) return null;
+
+    return (
+        <div className="game-main-area">
+            <LeftColumn 
+                currentPlayer={currentPlayer}
+                gameState={gameState}
+            />
+            
+            <MiddleColumn 
+                currentPlayer={currentPlayer}
+                availableMoves={availableMoves}
+                selectedMove={selectedMove}
+                onMoveSelect={onMoveSelect}
+                gameState={gameState}
+            />
+            
+            <RightColumn 
+                diceResult={diceResult}
+                hasRolled={hasRolled}
+                rollsRequired={rollsRequired}
+                rollsCompleted={rollsCompleted}
+                gameState={gameState}
+            />
+        </div>
+    );
+}
+
+export default GameMainArea;

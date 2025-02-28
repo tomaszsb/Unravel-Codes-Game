@@ -1,0 +1,47 @@
+// Component to display a single move when no choice is available
+const SingleMoveDisplay = ({ move }) => {
+    if (!move) return null;
+    
+    // Get move details
+    const moveData = window.GameDataManager.getSpaceData(move)?.[0];
+    
+    return React.createElement('div', {
+        className: 'single-move-display'
+    }, [
+        React.createElement('h3', {
+            key: 'title',
+            className: 'text-lg font-bold'
+        }, '🎯 Next Move'),
+        React.createElement('div', {
+            key: 'move-info',
+            className: 'move-info-box'
+        }, [
+            React.createElement('div', {
+                key: 'name',
+                className: 'text-xl font-semibold'
+            }, move),
+            moveData && [
+                React.createElement('div', {
+                    key: 'phase',
+                    className: 'text-sm text-gray-600'
+                }, `Phase: ${moveData.Phase || 'N/A'}`),
+                moveData.Description && React.createElement('p', {
+                    key: 'description',
+                    className: 'mt-2 text-base'
+                }, moveData.Description)
+            ]
+        ])
+    ]);
+};
+
+// Register SingleMoveDisplay with our component registry
+if (window.GameComponentRegistry) {
+    window.GameComponentRegistry.register('SingleMoveDisplay', SingleMoveDisplay);
+} else {
+    // Fallback if registry not available
+    window.SingleMoveDisplay = SingleMoveDisplay;
+    console.log('SingleMoveDisplay registered directly in window object');
+}
+
+// Add debug logging
+console.log('SingleMoveDisplay component defined and registered', typeof window.SingleMoveDisplay);

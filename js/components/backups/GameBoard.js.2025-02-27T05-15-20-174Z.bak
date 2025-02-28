@@ -1,0 +1,346 @@
+import React from 'react';
+import GameHeader from './GameHeader';
+import GameMainArea from './GameMainArea';
+import GameControls from './GameControls';
+import GameEndScreen from './GameEndScreen';
+import { GameInstructionsModal, GameLogModal } from './GameModals';
+import LoadingScreen from './LoadingScreen';
+import ErrorScreen from './ErrorScreen';
+
+class GameBoard extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loading: true,
+            error: null,
+            gameState: null,
+            currentPlayer: null,
+            availableMoves: [],
+            selectedMove: null,
+            showMoveSelection: false,
+            showEndGame: false,
+            showInstructions: false,
+            showLog: false,
+            diceResult: null,
+            rollsRequired: 0,
+            rollsCompleted: 0,
+            hasRolled: false,
+            finishedPlayers: []
+        };
+        
+        // Bind methods
+        this.handleMoveSelect = this.handleMoveSelect.bind(this);
+        this.handleEndTurn = this.handleEndTurn.bind(this);
+        this.handleDiceRoll = this.handleDiceRoll.bind(this);
+        this.toggleInstructions = this.toggleInstructions.bind(this);
+        this.toggleLog = this.toggleLog.bind(this);
+        this.processMove = this.processMove.bind(this);
+        this.checkGameEndConditions = this.checkGameEndConditions.bind(this);
+    }
+    
+    async componentDidMount() {
+        try {
+            // Initialize SaveManager
+            const saveInitResult = await window.GameSaveManager.initialize();
+            if (!saveInitResult.success) {
+                throw new Error(`Failed to initialize SaveManager: ${saveInitResult.errors.join(', ')}`);
+            }
+            
+            // Load CSV Data
+            const dataInitResult = await window.GameDataManager.initialize();
+            if (!dataInitResult.success) {
+                throw new Error(`Failed to load game data: ${dataInitResult.errors.join(', ')}`);
+            }
+            
+            // Set Up Player Manager
+            const players = window.GameSaveManager.load('players');
+            if (!players || players.length === 0) {
+                throw new Error('No players found. Please set up players first.');
+            }
+            
+            await window.GamePlayerManager.initialize(players);
+            
+            // Load game state
+            await this.loadGameState();
+            
+            // Set loading complete
+            this.setState({ loading: false });
+        } catch (error) {
+            console.error('Game initialization failed:', error);
+            this.setState({ 
+                loading: false, 
+                error: error.message 
+            });
+        }
+    }
+    
+    async loadGameState() {
+        const progressState = window.GameSaveManager.load('progressState');
+        if (!progressState) {
+            // Create initial progress state if not exists
+            await window.GameSaveManager.createInitialProgressState(
+                window.GameSaveManager.load('players')
+            );
+        }
+        
+        const gameState = window.GameSaveManager.load('progressState');
+        const currentPlayer = window.GamePlayerManager.getCurrentPlayer();
+        const finishedPlayers = window.GameSaveManager.getFinishedPlayers() || [];
+        
+        // Get available moves for current player
+        const playerPosition = window.PlayerProgressManager.getPlayerPosition(currentPlayer.name);
+        const availableMoves = window.PlayerProgressManager.getAvailableMoves(currentPlayer.name);
+        
+        this.setState({
+            gameState,
+            currentPlayer,
+            availableMoves,
+            finishedPlayers,
+            rollsRequired: gameState.rollState?.rollsRequired || 0,
+            rollsCompleted: gameState.rollState?.rollsCompleted || 0,
+            hasRolled: gameState.rollState?.hasRolled || false
+        });
+    }
+    
+    componentWillUnmount() {
+        // Clean up any subscriptions or listeners
+    }
+    
+    async handleMoveSelect(move) {
+        this.setState({ selectedMove: move });
+        await this.processMove(this.state.currentPlayer, move);
+    }
+    
+    async handleEndTurn() {
+        try {
+            const { currentPlayer } = this.state;
+            
+            // Commit any temporary state
+            await window.PlayerProgressManager.commitTemporaryState(currentPlayer.name);
+            
+            // Move to next player
+            const nextPlayer = window.GamePlayerManager.moveToNextPlayer();
+            
+            // Update game state
+            const gameState = window.GameSaveManager.load('progressState');
+            gameState.currentPlayerIndex = window.GamePlayerManager.getCurrentPlayerIndex();
+            gameState.rollState = {
+                hasRolled: false,
+                rolls: [],
+                rollsRequired: 0,
+                rollsCompleted: 0
+            };
+            
+            await window.GameSaveManager.save('progressState', gameState);
+            
+            // Check for game end
+            const gameEnded = await this.checkGameEndConditions();
+            if (gameEnded) {
+                await this.handleGameEnd();
+            } else {
+                // Update state with new player and moves
+                const availableMoves = window.PlayerProgressManager.getAvailableMoves(nextPlayer.name);
+                this.setState({ 
+                    currentPlayer: nextPlayer,
+                    availableMoves,
+                    selectedMove: null,
+                    gameState,
+                    hasRolled: false,
+                    rollsRequired: 0,
+                    rollsCompleted: 0
+                });
+            }
+        } catch (error) {
+            console.error('End turn failed:', error);
+            this.setState({ error: error.message });
+        }
+    }
+    
+    async handleDiceRoll() {
+        try {
+            const { currentPlayer, rollsCompleted, rollsRequired } = this.state;
+            
+            // Generate a random dice roll
+            const roll = Math.floor(Math.random() * 6) + 1;
+            
+            // Update game state
+            const gameState = window.GameSaveManager.load('progressState');
+            
+            if (!gameState.rollState) {
+                gameState.rollState = {
+                    hasRolled: true,
+                    rolls: [roll],
+                    rollsRequired: 1,
+                    rollsCompleted: 1
+                };
+            } else {
+                gameState.rollState.hasRolled = true;
+                gameState.rollState.rolls = [...gameState.rollState.rolls, roll];
+                gameState.rollState.rollsCompleted = rollsCompleted + 1;
+            }
+            
+            await window.GameSaveManager.save('progressState', gameState);
+            
+            // Get move options based on dice roll
+            const currentSpace = window.PlayerProgressManager.getPlayerPosition(currentPlayer.name);
+            const diceRollData = window.GameDataManager.getDiceRollData(currentSpace, roll);
+            
+            this.setState({
+                diceResult: roll,
+                gameState,
+                hasRolled: true,
+                rollsCompleted: rollsCompleted + 1
+            });
+            
+            // Process dice roll result
+            if (diceRollData) {
+                // Handle special dice roll actions
+                // ...
+            }
+        } catch (error) {
+            console.error('Dice roll failed:', error);
+            this.setState({ error: error.message });
+        }
+    }
+    
+    async processMove(player, targetSpace) {
+        try {
+            // Validate move
+            if (!window.PlayerProgressManager.isValidMove(player.name, targetSpace)) {
+                throw new Error('Invalid move');
+            }
+
+            // Update position
+            await window.PlayerProgressManager.updatePlayerPosition(
+                player.name,
+                targetSpace
+            );
+
+            // Reload game state
+            await this.loadGameState();
+            
+            // Check for game end
+            if (targetSpace === 'FINISH') {
+                await this.handleFinishPosition(player);
+            }
+        } catch (error) {
+            console.error('Move failed:', error);
+            this.setState({ error: error.message });
+        }
+    }
+    
+    async handleFinishPosition(player) {
+        try {
+            // Add player to finished list
+            const finishedPlayers = window.GameSaveManager.getFinishedPlayers() || [];
+            if (!finishedPlayers.includes(player.name)) {
+                finishedPlayers.push(player.name);
+                await window.GameSaveManager.save('finishedPlayers', finishedPlayers);
+            }
+            
+            this.setState({ finishedPlayers });
+            
+            // Check if game ended
+            await this.checkGameEndConditions();
+        } catch (error) {
+            console.error('Finish position handling failed:', error);
+            this.setState({ error: error.message });
+        }
+    }
+    
+    async checkGameEndConditions() {
+        const finishedPlayers = window.GameSaveManager.getFinishedPlayers() || [];
+        const allPlayers = window.GameSaveManager.load('players');
+        
+        // Game is ended when all players have finished
+        const gameEnded = finishedPlayers.length === allPlayers.length;
+        
+        if (gameEnded) {
+            // Update game state
+            const gameState = window.GameSaveManager.load('progressState');
+            gameState.gameEnded = true;
+            await window.GameSaveManager.save('progressState', gameState);
+        }
+        
+        return gameEnded;
+    }
+    
+    async handleGameEnd() {
+        // Show end game screen
+        this.setState({ showEndGame: true });
+    }
+    
+    getFinalRankings() {
+        const finishedPlayers = window.GameSaveManager.getFinishedPlayers() || [];
+        const players = window.GameSaveManager.load('players');
+        
+        return finishedPlayers.map((playerName, index) => {
+            const player = players.find(p => p.name === playerName);
+            return {
+                rank: index + 1,
+                name: player.name,
+                color: player.color
+            };
+        });
+    }
+    
+    toggleInstructions() {
+        this.setState(prevState => ({ showInstructions: !prevState.showInstructions }));
+    }
+    
+    toggleLog() {
+        this.setState(prevState => ({ showLog: !prevState.showLog }));
+    }
+    
+    render() {
+        const { 
+            loading, error, gameState, currentPlayer, showEndGame,
+            availableMoves, selectedMove, showInstructions, showLog,
+            diceResult, hasRolled, rollsRequired, rollsCompleted,
+            finishedPlayers
+        } = this.state;
+        
+        // Loading, error, and end game screens
+        if (loading) return <LoadingScreen />;
+        if (error) return <ErrorScreen error={error} />;
+        if (showEndGame) return <GameEndScreen finalRankings={this.getFinalRankings()} />;
+        
+        // Main game layout
+        return (
+            <div className="game-container">
+                <GameHeader 
+                    gameState={gameState}
+                    currentPlayer={currentPlayer}
+                    finishedPlayers={finishedPlayers}
+                />
+                <GameMainArea 
+                    gameState={gameState}
+                    currentPlayer={currentPlayer}
+                    availableMoves={availableMoves}
+                    selectedMove={selectedMove}
+                    onMoveSelect={this.handleMoveSelect}
+                    diceResult={diceResult}
+                    hasRolled={hasRolled}
+                    rollsRequired={rollsRequired}
+                    rollsCompleted={rollsCompleted}
+                />
+                <GameControls 
+                    onEndTurn={this.handleEndTurn}
+                    onDiceRoll={this.handleDiceRoll}
+                    onToggleInstructions={this.toggleInstructions}
+                    onToggleLog={this.toggleLog}
+                    hasRolled={hasRolled}
+                    canEndTurn={rollsCompleted >= rollsRequired || selectedMove}
+                    gameState={gameState}
+                />
+                {showInstructions && <GameInstructionsModal onClose={this.toggleInstructions} />}
+                {showLog && <GameLogModal onClose={this.toggleLog} />}
+            </div>
+        );
+    }
+}
+
+// Make the component available globally
+window.GameBoard = GameBoard;
+
+export default GameBoard;

@@ -1,0 +1,13 @@
+import React from 'react';
+
+function LoadingScreen() {
+    return (
+        <div className="loading-screen">
+            <div className="loading-spinner"></div>
+            <h2>Loading Game...</h2>
+            <p>Please wait while we set up the board.</p>
+        </div>
+    );
+}
+
+export default LoadingScreen;

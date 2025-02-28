@@ -1,0 +1,77 @@
+import React from 'react';
+import MoveSelection from './MoveSelection';
+import SingleMoveDisplay from './SingleMoveDisplay';
+
+function MiddleColumn({
+    currentPlayer,
+    availableMoves,
+    selectedMove,
+    onMoveSelect,
+    gameState
+}) {
+    if (!currentPlayer || !gameState) return null;
+    
+    const currentSpace = window.PlayerProgressManager.getPlayerPosition(currentPlayer.name);
+    
+    return (
+        <div className="middle-column">
+            <div className="progress-map">
+                <h3>Game Progress</h3>
+                <div className="map-container">
+                    {/* Progress Map Visualization */}
+                    {gameState.mainPath && gameState.mainPath.map((space, index) => {
+                        const isCurrentSpace = space === currentSpace;
+                        const playerHere = [];
+                        
+                        // Find all players at this space
+                        Object.entries(gameState.playerPositions || {}).forEach(([playerName, position]) => {
+                            if (position === space) {
+                                const player = window.GameSaveManager.load('players')
+                                    .find(p => p.name === playerName);
+                                if (player) {
+                                    playerHere.push(player);
+                                }
+                            }
+                        });
+                        
+                        return (
+                            <div 
+                                key={space}
+                                className={`map-space ${isCurrentSpace ? 'current-space' : ''}`}
+                                title={space}
+                            >
+                                <div className="space-name">{space}</div>
+                                <div className="player-markers">
+                                    {playerHere.map(player => (
+                                        <div
+                                            key={player.name}
+                                            className="player-marker"
+                                            style={{ backgroundColor: player.color }}
+                                            title={player.name}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+            
+            <div className="moves-section">
+                <h3>Available Moves</h3>
+                {availableMoves.length > 0 ? (
+                    <MoveSelection 
+                        moves={availableMoves}
+                        onSelect={onMoveSelect}
+                    />
+                ) : selectedMove ? (
+                    <SingleMoveDisplay move={selectedMove} />
+                ) : (
+                    <p>No moves available. Roll the dice or end your turn.</p>
+                )}
+            </div>
+        </div>
+    );
+}
+
+export default MiddleColumn;

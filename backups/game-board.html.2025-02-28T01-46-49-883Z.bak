@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Game Board">
+    <title>Game Board</title>
+    
+    <!-- CSS files -->
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/game-styles.css">
+
+    <!-- Load React -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+</head>
+<body>
+    <!-- Root container for React -->
+    <div id="game-board-root"></div>
+    <div id="status-display" style="display: none; padding: 20px; margin: 20px; border: 1px solid #ccc; background: #f5f5f5;"></div>
+
+    <!-- Load all required scripts -->
+    <!-- Core Systems -->
+    <script src="js/file-system.js"></script>
+    <script src="js/csv-parser.js"></script>
+    <script src="js/save-manager.js"></script>
+    <script src="js/game-data-manager.js"></script>
+    <script src="js/player-palettes.js"></script>
+    <script src="js/color-manager.js"></script>
+    <script src="js/player-manager.js"></script>
+    <script src="js/player-progress-manager.js"></script>
+
+    <!-- Legacy Components (kept for compatibility) -->
+    <script src="js/components/leaderboard-component.js"></script>
+    <script src="js/components/progress-map-component.js"></script>
+    <script src="js/components/space-info-component.js"></script>
+    <script src="js/components/player-status-component.js"></script>
+    <script src="js/components/action-requirements-component.js"></script>
+    <script src="js/components/dice-prompt-component.js"></script>
+    <script src="js/components/dice-result-component.js"></script>
+    <script src="js/components/dice-system-component.js"></script>
+    <script src="js/components/game-instructions-component.js"></script>
+    <script src="js/components/performed-actions-component.js"></script>
+    <script src="js/components/move-selection-component.js"></script>
+    <script src="js/components/game-state-display-component.js"></script>
+
+    <!-- Refactored Components (load in dependency order) -->
+    <!-- 1. Basic components with no dependencies -->
+    <script src="js/components/SingleMoveDisplay.js"></script>
+    <script src="js/components/MoveSelection.js"></script>
+    
+    <!-- 4. Main controller (depends on all others) -->
+    <script src="js/components/GameBoard.js"></script>
+
+    <script>
+    // Log loaded scripts to track progress
+    function logStatus(message) {
+        console.log(message);
+        const statusDisplay = document.getElementById('status-display');
+        if (statusDisplay) {
+            const entry = document.createElement('div');
+            entry.textContent = message;
+            statusDisplay.appendChild(entry);
+        }
+    }
+    
+    // Load a single script with Promise
+    function loadScript(src) {
+        return new Promise((resolve, reject) => {
+            logStatus(`Loading script: ${src}`);
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                logStatus(`✓ Script loaded: ${src}`);
+                resolve();
+            };
+            script.onerror = (error) => {
+                logStatus(`✗ Script loading error: ${src}`);
+                reject(error);
+            };
+            document.head.appendChild(script);
+        });
+    }
+    
+    // Verify component is available
+    function verifyComponent(componentName, maxAttempts = 10) {
+        return new Promise((resolve, reject) => {
+            let attempts = 0;
+            
+            const checkComponent = () => {
+                attempts++;
+                logStatus(`Verifying component (attempt ${attempts}): ${componentName}`);
+                
+                if (typeof window[componentName] === 'function') {
+                    logStatus(`✓ Component verified: ${componentName}`);
+                    resolve(window[componentName]);
+                    return;
+                }
+                
+                if (attempts >= maxAttempts) {
+                    logStatus(`✗ Component verification failed: ${componentName}`);
+                    reject(new Error(`Component not found after ${attempts} attempts: ${componentName}`));
+                    return;
+                }
+                
+                // Try again after a short delay
+                setTimeout(checkComponent, 100);
+            };
+            
+            checkComponent();
+        });
+    }
+    
+    // Main initialization
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Add a small delay to ensure all scripts are loaded
+        setTimeout(async () => {
+            try {
+                logStatus('=== Game Board Initialization Started ===');
+                
+                // Log available components
+                logStatus('Available components: ' + 
+                    Object.keys(window)
+                        .filter(key => key.includes('Game') || key === 'LeaderBoard' || key === 'ProgressMap')
+                        .join(', ')
+                );
+                
+                // Verify required components are available
+                const requiredComponents = [
+                    'GameBoard', 'LeaderBoard', 'ProgressMap', 'SpaceInfo', 
+                    'PlayerStatus', 'ActionRequirements', 'DiceSystem', 
+                    'DiceResult', 'MoveSelection', 'SingleMoveDisplay',
+                    'GameStateDisplay'
+                ];
+                
+                // Check all components are available
+                for (const component of requiredComponents) {
+                    await verifyComponent(component);
+                }
+                
+                logStatus('All components verified successfully');
+                
+                // Get the root element
+                const rootElement = document.getElementById('game-board-root');
+                if (!rootElement) {
+                    throw new Error('Root element not found: game-board-root');
+                }
+                
+                // Render the GameBoard
+                logStatus('Rendering GameBoard component...');
+                ReactDOM.render(
+                    React.createElement(window.GameBoard),
+                    rootElement
+                );
+                
+                logStatus('=== Game Board Initialization Complete ===');
+                
+                // Hide status display in production
+                const statusDisplay = document.getElementById('status-display');
+                if (statusDisplay) {
+                    statusDisplay.style.display = 'none';
+                }
+                
+            } catch (error) {
+                logStatus(`ERROR: ${error.message}`);
+                console.error('Game initialization failed:', error);
+                
+                // Show status display for debugging
+                const statusDisplay = document.getElementById('status-display');
+                if (statusDisplay) {
+                    statusDisplay.style.display = 'block';
+                }
+                
+                // Display error on the page
+                const errorElement = document.createElement('div');
+                errorElement.className = 'error-container';
+                errorElement.innerHTML = `
+                    <h2>Game Initialization Failed</h2>
+                    <p class="error-message">${error.message}</p>
+                    <button onclick="window.location.reload()">Retry</button>
+                    <button onclick="window.location.href='player-setup.html'">Return to Setup</button>
+                `;
+                
+                document.body.appendChild(errorElement);
+            }
+        }, 300); // 300ms delay to ensure scripts are loaded
+    });
+    </script>
+</body>
+</html>

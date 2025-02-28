@@ -1,0 +1,53 @@
+import React from 'react';
+
+class GameHeader extends React.Component {
+    render() {
+        const { gameState, currentPlayer, finishedPlayers } = this.props;
+        
+        if (!gameState || !currentPlayer) return null;
+        
+        const players = window.GameSaveManager.load('players') || [];
+        
+        return (
+            <div className="game-header">
+                <div className="current-player">
+                    <h2>Current Player: 
+                        <span style={{ color: currentPlayer.color }}>
+                            {currentPlayer.name}
+                        </span>
+                    </h2>
+                </div>
+                
+                <div className="leaderboard">
+                    <h3>Player Rankings</h3>
+                    <table className="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Position</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {players.map(player => {
+                                const position = window.PlayerProgressManager.getPlayerPosition(player.name);
+                                const isFinished = finishedPlayers.includes(player.name);
+                                const isCurrent = player.name === currentPlayer.name;
+                                
+                                return (
+                                    <tr key={player.name} className={isCurrent ? 'current-player-row' : ''}>
+                                        <td style={{ color: player.color }}>{player.name}</td>
+                                        <td>{position}</td>
+                                        <td>{isFinished ? 'Finished' : 'Playing'}</td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        );
+    }
+}
+
+export default GameHeader;

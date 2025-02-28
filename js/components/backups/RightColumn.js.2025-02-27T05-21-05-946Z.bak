@@ -1,0 +1,104 @@
+import React from 'react';
+
+function RightColumn({
+    diceResult,
+    hasRolled,
+    rollsRequired,
+    rollsCompleted,
+    gameState
+}) {
+    if (!gameState) return null;
+    
+    // Get recent actions from game state or visit history
+    const visitHistory = window.GameSaveManager.load('visitHistory') || [];
+    const recentActions = visitHistory.slice(-5).reverse(); // Last 5 actions, most recent first
+    
+    return (
+        <div className="right-column">
+            <div className="dice-results">
+                <h3>Dice Results</h3>
+                <div className="dice-display">
+                    {diceResult ? (
+                        <div className="dice-result">
+                            <div className="dice-face">{diceResult}</div>
+                            <p className="dice-info">
+                                Roll {rollsCompleted} of {rollsRequired}
+                            </p>
+                        </div>
+                    ) : (
+                        <p>Roll the dice to continue.</p>
+                    )}
+                </div>
+            </div>
+            
+            <div className="recent-actions">
+                <h3>Recent Actions</h3>
+                {recentActions.length > 0 ? (
+                    <ul className="action-list">
+                        {recentActions.map((action, index) => (
+                            <li key={index} className="action-item">
+                                <span className="action-player" style={{ color: action.playerColor }}>
+                                    {action.player}
+                                </span>
+                                <span className="action-description">
+                                    {action.description}
+                                </span>
+                                <span className="action-space">
+                                    {action.space}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                ) : (
+                    <p>No actions recorded yet.</p>
+                )}
+            </div>
+            
+            <div className="game-state-info">
+                <h3>Game Information</h3>
+                <div className="game-stats">
+                    <p><strong>Current Phase:</strong> {getCurrentPhase(gameState)}</p>
+                    <p><strong>Players:</strong> {window.GameSaveManager.load('players')?.length || 0}</p>
+                    <p><strong>Turns Completed:</strong> {gameState.turnsCompleted || 0}</p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// Helper function to determine current game phase
+function getCurrentPhase(gameState) {
+    // This would need to be implemented based on your game's phase system
+    // Example implementation:
+    const players = window.GameSaveManager.load('players') || [];
+    const positions = gameState.playerPositions || {};
+    
+    // Count number of players in each phase
+    const phaseCount = {};
+    
+    for (const player of players) {
+        const position = positions[player.name];
+        if (position) {
+            const spaceData = window.GameDataManager.getSpaceData(position);
+            const phase = spaceData?.Phase;
+            if (phase) {
+                phaseCount[phase] = (phaseCount[phase] || 0) + 1;
+            }
+        }
+    }
+    
+    // Find the phase with most players
+    let mostCommonPhase = 'N/A';
+    let maxCount = 0;
+    
+    for (const [phase, count] of Object.entries(phaseCount)) {
+        if (count > maxCount) {
+            mostCommonPhase = phase;
+            maxCount = count;
+        }
+    }
+    
+    return mostCommonPhase;
+}
+
+export default RightColumn;

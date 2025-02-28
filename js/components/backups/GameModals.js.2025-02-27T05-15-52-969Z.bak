@@ -1,0 +1,87 @@
+import React from 'react';
+
+// Instructions modal
+export function GameInstructionsModal({ onClose }) {
+    return (
+        <div className="modal-overlay">
+            <div className="modal-content instructions-modal">
+                <div className="modal-header">
+                    <h2>Game Instructions</h2>
+                    <button className="close-button" onClick={onClose}>×</button>
+                </div>
+                
+                <div className="modal-body">
+                    <h3>Game Overview</h3>
+                    <p>This project management simulation game takes you through the key phases of project management from initiation to closure.</p>
+                    
+                    <h3>Objective</h3>
+                    <p>Navigate through the project lifecycle, making decisions along the way to complete your project successfully and reach the finish position.</p>
+                    
+                    <h3>Game Flow</h3>
+                    <ol>
+                        <li>Roll the dice on your turn</li>
+                        <li>Select an available move from the options presented</li>
+                        <li>Complete any actions required by the space you land on</li>
+                        <li>End your turn</li>
+                    </ol>
+                    
+                    <h3>Spaces</h3>
+                    <p>Different spaces represent different phases and challenges in project management:</p>
+                    <ul>
+                        <li><strong>PLAN spaces:</strong> Planning phase activities</li>
+                        <li><strong>ARCH spaces:</strong> Architecture and design</li>
+                        <li><strong>FUND spaces:</strong> Financial considerations</li>
+                        <li><strong>EXEC spaces:</strong> Execution phase</li>
+                        <li><strong>CLOSE spaces:</strong> Project closure activities</li>
+                    </ul>
+                    
+                    <h3>Winning</h3>
+                    <p>The first player to reach the FINISH space completes the game. All players will have a chance to finish, and final rankings will be displayed.</p>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// Game log modal
+export function GameLogModal({ onClose }) {
+    // Retrieve visit history from save manager
+    const visitHistory = window.GameSaveManager.load('visitHistory') || [];
+    
+    return (
+        <div className="modal-overlay">
+            <div className="modal-content log-modal">
+                <div className="modal-header">
+                    <h2>Game Log</h2>
+                    <button className="close-button" onClick={onClose}>×</button>
+                </div>
+                
+                <div className="modal-body">
+                    {visitHistory.length > 0 ? (
+                        <div className="log-entries">
+                            {visitHistory.map((entry, index) => (
+                                <div key={index} className="log-entry">
+                                    <div className="log-turn">Turn {entry.turn || '?'}</div>
+                                    <div className="log-player" style={{ color: entry.playerColor }}>
+                                        {entry.player}
+                                    </div>
+                                    <div className="log-action">
+                                        {entry.description}
+                                    </div>
+                                    <div className="log-space">
+                                        {entry.space}
+                                    </div>
+                                    <div className="log-timestamp">
+                                        {new Date(entry.timestamp).toLocaleString()}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p>No game actions recorded yet.</p>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}

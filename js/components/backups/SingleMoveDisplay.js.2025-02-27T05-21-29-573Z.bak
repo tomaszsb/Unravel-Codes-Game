@@ -1,0 +1,38 @@
+import React from 'react';
+
+function SingleMoveDisplay({ move }) {
+    if (!move) return null;
+    
+    // Get move details from GameDataManager
+    const moveData = window.GameDataManager.getSpaceData(move);
+    
+    return (
+        <div className="single-move-display">
+            <h4 className="move-title">Selected Move</h4>
+            <div className="move-card">
+                <h5>{move}</h5>
+                
+                {moveData && (
+                    <div className="move-details">
+                        <p><strong>Type:</strong> {moveData['Visit Type'] || 'Standard Move'}</p>
+                        <p><strong>Phase:</strong> {moveData.Phase || 'N/A'}</p>
+                        
+                        {moveData.Description && (
+                            <div className="move-description">
+                                <p><strong>Description:</strong></p>
+                                <p>{moveData.Description}</p>
+                            </div>
+                        )}
+                    </div>
+                )}
+                
+                <div className="move-status">
+                    <span className="status-icon">✓</span>
+                    <span className="status-text">Move selected</span>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default SingleMoveDisplay;

@@ -155,21 +155,11 @@ class GameBoard extends React.Component {
         if (!currentPlayer) return;
         
         try {
-            // Reset dice system
-            if (window.DiceSystem && window.DiceSystem.resetDice) {
-                window.DiceSystem.resetDice();
-            }
-            
             // Commit any temporary state
             await window.PlayerProgressManager.commitTemporaryState(currentPlayer.name);
             
             // Move to next player
             const nextPlayer = window.GamePlayerManager.moveToNextPlayer();
-            
-            // Update player colors when changing players
-            if (window.ColorManager && nextPlayer) {
-                window.ColorManager.updatePlayerColors(nextPlayer);
-            }
             
             // Check for game end
             const gameEnded = await this.checkGameEndConditions();
@@ -196,11 +186,6 @@ class GameBoard extends React.Component {
     async handleNegotiate() {
         // Implementation for negotiation
         console.log('Negotiate action triggered');
-        
-        // Reset dice system when negotiating
-        if (window.DiceSystem && window.DiceSystem.resetDice) {
-            window.DiceSystem.resetDice();
-        }
     }
     
     toggleInstructions() {
@@ -350,29 +335,33 @@ class GameBoard extends React.Component {
                 className: 'game-row'
             }, React.createElement(window.ProgressMap)),
     
-            // Main Game Area - Three Columns
+            // Main Game Area - Three Columns - MODIFIED THIS SECTION ONLY
             React.createElement('div', {
                 key: 'main-game-row',
                 className: 'game-row grid grid-cols-3 gap-4'
             }, [
-                // Left Column - Space Info
+                // Left Column - Space Info and Action Requirements
                 React.createElement('div', {
                     key: 'left-column',
                     className: 'game-column'
                 }, [
                     React.createElement(window.SpaceInfo, {
                         key: 'space-info'
+                    }),
+                    React.createElement(window.PlayerStatus, {
+                        key: 'player-status'
+                    }),
+                    // Move ActionRequirements here from middle column
+                    React.createElement(window.ActionRequirements, {
+                        key: 'action-requirements'
                     })
                 ]),
-    
-                // Middle Column - Actions and Moves
+
+                // Middle Column - Moves and Dice - REMOVED ActionRequirements from here
                 React.createElement('div', {
                     key: 'middle-column',
                     className: 'game-column'
                 }, [
-                    React.createElement(window.ActionRequirements, {
-                        key: 'action-requirements'
-                    }),
                     // Only show moves section if we have moves
                     availableMoves.length > 0 && React.createElement('div', {
                         key: 'moves-container',
@@ -397,15 +386,12 @@ class GameBoard extends React.Component {
                         key: 'dice-system'
                     })
                 ]),
-    
-                // Right Column - Game State
+
+                // Right Column - Game State (unchanged)
                 React.createElement('div', {
                     key: 'right-column',
                     className: 'game-column'
                 }, [
-                    React.createElement(window.PlayerStatus, {
-                        key: 'player-status'
-                    }),
                     React.createElement(window.DiceResult, {
                         key: 'dice-result'
                     }),

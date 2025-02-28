@@ -96,13 +96,13 @@ window.GameSystemInitializer = {
             throw new Error('GameDataManager not ready after initialization');
         }
         
-        // Check PlayerManager - FIXED: Access as property not function
-        if (!window.GamePlayerManager.isInitialized) {
+        // Check PlayerManager
+        if (!window.GamePlayerManager.isInitialized()) {
             throw new Error('GamePlayerManager not initialized properly');
         }
         
-        // Check PlayerProgressManager - FIXED: Access as property not function
-        if (!window.PlayerProgressManager.isInitialized) {
+        // Check PlayerProgressManager
+        if (!window.PlayerProgressManager.isInitialized()) {
             throw new Error('PlayerProgressManager not initialized properly');
         }
         

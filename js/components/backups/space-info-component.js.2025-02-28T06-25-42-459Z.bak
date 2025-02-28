@@ -10,9 +10,6 @@ const SpaceInfo = ({ hideAvailableMoves = false }) => {
       budget: 0,
       timeSpent: 0
   });
-  
-  // Create a reference to track if table is rendered - FIX FOR DUPLICATE TABLES
-  const hasRenderedTableRef = React.useRef(false);
 
   React.useEffect(() => {
       let isMounted = true;
@@ -94,9 +91,6 @@ const SpaceInfo = ({ hideAvailableMoves = false }) => {
                   setPhase(visitTypeData?.Phase || spaceData[0].Phase);
                   setProjectStats(stats);
                   setError(null);
-                  
-                  // Reset the hasRenderedTable flag when space data changes - FIX FOR DUPLICATE TABLES
-                  hasRenderedTableRef.current = false;
               }
           } catch (err) {
               console.error('Error in SpaceInfo:', err);
@@ -205,51 +199,50 @@ const SpaceInfo = ({ hideAvailableMoves = false }) => {
 
    //Project Stats Table
 const renderStatsTable = () => {
-    // Only render table once - FIXED: Use React.useRef instead of this
-    if (hasRenderedTableRef.current) return null;
-    hasRenderedTableRef.current = true;
-    
-    return React.createElement('table', {
-        className: "w-full border-collapse mt-4"
-    }, [
-        React.createElement('thead', {
-            key: 'thead'
-        }, React.createElement('tr', {}, [
-            React.createElement('th', {
-                key: 'type-header',
-                className: "border p-2 text-left bg-gray-50"
-            }, "Type"),
-            React.createElement('th', {
-                key: 'value-header',
-                className: "border p-2 text-left bg-gray-50"
-            }, "Value")
-        ])),
-        React.createElement('tbody', {
-            key: 'tbody'
-        }, [
-            React.createElement('tr', {
-                key: 'budget-row'
-            }, [
-                React.createElement('td', {
-                    className: "border p-2"
-                }, "Total Project Budget:"),
-                React.createElement('td', {
-                    className: "border p-2"
-                }, `${projectStats.budget} dollars`)
-            ]),
-            React.createElement('tr', {
-                key: 'time-row'
-            }, [
-                React.createElement('td', {
-                    className: "border p-2"
-                }, "Total Time Spent:"),
-                React.createElement('td', {
-                    className: "border p-2"
-              }, `${projectStats.timeSpent} days`)
-           ])
-        ])
-    ]);
-};
+    // Only render table once
+    if (this.hasRenderedTable) return null;
+    this.hasRenderedTable = true;
+      return React.createElement('table', {
+          className: "w-full border-collapse mt-4"
+      }, [
+          React.createElement('thead', {
+              key: 'thead'
+          }, React.createElement('tr', {}, [
+              React.createElement('th', {
+                  key: 'type-header',
+                  className: "border p-2 text-left bg-gray-50"
+              }, "Type"),
+              React.createElement('th', {
+                  key: 'value-header',
+                  className: "border p-2 text-left bg-gray-50"
+              }, "Value")
+          ])),
+          React.createElement('tbody', {
+              key: 'tbody'
+          }, [
+              React.createElement('tr', {
+                  key: 'budget-row'
+              }, [
+                  React.createElement('td', {
+                      className: "border p-2"
+                  }, "Total Project Budget:"),
+                  React.createElement('td', {
+                      className: "border p-2"
+                  }, `${projectStats.budget} dollars`)
+              ]),
+              React.createElement('tr', {
+                  key: 'time-row'
+              }, [
+                  React.createElement('td', {
+                      className: "border p-2"
+                  }, "Total Time Spent:"),
+                  React.createElement('td', {
+                      className: "border p-2"
+                }, `${projectStats.timeSpent} days`)
+             ])
+          ])
+      ]);
+  };
 
   return React.createElement('div', {
       className: "w-full p-4"

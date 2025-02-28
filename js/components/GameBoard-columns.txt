@@ -1,0 +1,68 @@
+// Only modifying the relevant part of the render method in GameBoard.js
+// This replaces the duplicated section with just the components that should be there
+
+// Main Game Area - Three Columns
+React.createElement('div', {
+    key: 'main-game-row',
+    className: 'game-row grid grid-cols-3 gap-4'
+}, [
+    // Left Column - Space Info and Action Requirements
+    React.createElement('div', {
+        key: 'left-column',
+        className: 'game-column'
+    }, [
+        React.createElement(window.SpaceInfo, {
+            key: 'space-info'
+        }),
+        React.createElement(window.PlayerStatus, {
+            key: 'player-status'
+        }),
+        // Move ActionRequirements here from middle column
+        React.createElement(window.ActionRequirements, {
+            key: 'action-requirements'
+        })
+    ]),
+
+    // Middle Column - Moves and Dice
+    React.createElement('div', {
+        key: 'middle-column',
+        className: 'game-column'
+    }, [
+        // Only show moves section if we have moves
+        availableMoves.length > 0 && React.createElement('div', {
+            key: 'moves-container',
+            className: 'bg-white rounded-lg shadow-sm p-4'
+        }, 
+            availableMoves.length === 1 ? 
+            // Single move display
+            React.createElement(window.SingleMoveDisplay, {
+                key: 'single-move',
+                move: availableMoves[0]
+            }) 
+            : 
+            // Multiple moves selection
+            React.createElement(window.MoveSelection, {
+                key: 'move-selection',
+                moves: availableMoves,
+                onSelect: this.handleMoveSelect,
+                selectedMove: selectedMove
+            })
+        ),
+        React.createElement(window.DiceSystem, {
+            key: 'dice-system'
+        })
+    ]),
+
+    // Right Column - Game State
+    React.createElement('div', {
+        key: 'right-column',
+        className: 'game-column'
+    }, [
+        React.createElement(window.DiceResult, {
+            key: 'dice-result'
+        }),
+        React.createElement(window.GameStateDisplay, {
+            key: 'game-state-display'
+        })
+    ])
+]),

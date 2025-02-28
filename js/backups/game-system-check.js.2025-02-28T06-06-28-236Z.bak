@@ -13,11 +13,11 @@ window.GameSystemCheck = {
             // Check GameDataManager
             if (!window.GameDataManager?.isReady()) return false;
             
-            // Check PlayerManager - FIXED to check the property instead of calling a function
-            if (!window.GamePlayerManager?.isInitialized) return false;
+            // Check PlayerManager
+            if (!window.GamePlayerManager?.isInitialized()) return false;
             
-            // Check PlayerProgressManager - FIXED to check the property instead of calling a function
-            if (!window.PlayerProgressManager?.isInitialized) return false;
+            // Check PlayerProgressManager
+            if (!window.PlayerProgressManager?.isInitialized()) return false;
             
             // If we got here, all systems are ready
             return true;
@@ -32,9 +32,8 @@ window.GameSystemCheck = {
         return {
             saveManagerAvailable: !!window.GameSaveManager,
             gameDataManagerReady: window.GameDataManager?.isReady() || false,
-            // FIXED to check properties instead of calling functions
-            playerManagerInitialized: !!window.GamePlayerManager?.isInitialized,
-            progressManagerInitialized: !!window.PlayerProgressManager?.isInitialized,
+            playerManagerInitialized: window.GamePlayerManager?.isInitialized() || false,
+            progressManagerInitialized: window.PlayerProgressManager?.isInitialized() || false,
             allReady: this.areSystemsReady()
         };
     },

@@ -169,37 +169,6 @@ const DiceSystem = () => {
         }
     };
 
-    // Added resetDice function for external components to call
-    const resetDice = () => {
-        console.log('Resetting dice state');
-        setIsRolling(false);
-        
-        // Reset the roll state directly
-        const progressState = window.GameSaveManager.load('progressState');
-        if (progressState && progressState.rollState) {
-            progressState.rollState.hasRolled = false;
-            progressState.rollState.rolls = [];
-            progressState.rollState.rollsCompleted = 0;
-            window.GameSaveManager.save('progressState', progressState);
-        }
-        
-        // Update local state
-        setRollState(progressState?.rollState || null);
-        setCanRoll(true);
-    };
-
-    // Expose the reset method to the window
-    React.useEffect(() => {
-        window.DiceSystem = window.DiceSystem || {};
-        window.DiceSystem.resetDice = resetDice;
-        
-        return () => {
-            if (window.DiceSystem) {
-                window.DiceSystem.resetDice = null;
-            }
-        };
-    }, []);
-
     // Error state
     if (error) {
         return React.createElement('div', {

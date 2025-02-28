@@ -38,20 +38,11 @@ class GameBoard extends React.Component {
         try {
             console.log('GameBoard component mounting...');
             
-            // Ensure systems are initialized before proceeding - FIXED: Check directly for isInitialized property
-            if (!(window.GameSystemInitializer?.initialized) &&
-                !(window.GameDataManager?.isReady() && 
-                  window.GamePlayerManager?.isInitialized && 
-                  window.PlayerProgressManager?.isInitialized)) {
+            // Ensure systems are initialized before proceeding
+            if (!window.GameSystemInitializer?.isInitialized()) {
                 console.log('Game systems not initialized, attempting initialization...');
                 try {
-                    if (window.GameSystemInitializer?.initializeWithRetries) {
-                        await window.GameSystemInitializer.initializeWithRetries(2);
-                    } else if (window.GameSystemCheck?.repairSystems) {
-                        await window.GameSystemCheck.repairSystems();
-                    } else {
-                        throw new Error("No initialization or repair system available");
-                    }
+                    await window.GameSystemInitializer.initializeWithRetries(2);
                 } catch (error) {
                     console.error('Failed to initialize game systems:', error);
                     throw new Error('Game systems initialization failed. Please refresh the page.');
@@ -69,18 +60,18 @@ class GameBoard extends React.Component {
     }
     
     async initialize() {
-        // Double-check core systems are ready - FIXED: Check directly for isInitialized property
+        // Double-check core systems are ready
         if (!window.GameDataManager?.isReady()) {
             console.error('GameDataManager not ready');
             throw new Error('Game data not ready. Please refresh or restart setup.');
         }
         
-        if (!window.GamePlayerManager?.isInitialized) {
+        if (!window.GamePlayerManager?.isInitialized()) {
             console.error('GamePlayerManager not initialized');
             throw new Error('Player manager not ready. Please refresh or restart setup.');
         }
         
-        if (!window.PlayerProgressManager?.isInitialized) {
+        if (!window.PlayerProgressManager?.isInitialized()) {
             console.error('PlayerProgressManager not initialized');
             throw new Error('Progress manager not ready. Please refresh or restart setup.');
         }
@@ -155,21 +146,11 @@ class GameBoard extends React.Component {
         if (!currentPlayer) return;
         
         try {
-            // Reset dice system
-            if (window.DiceSystem && window.DiceSystem.resetDice) {
-                window.DiceSystem.resetDice();
-            }
-            
             // Commit any temporary state
             await window.PlayerProgressManager.commitTemporaryState(currentPlayer.name);
             
             // Move to next player
             const nextPlayer = window.GamePlayerManager.moveToNextPlayer();
-            
-            // Update player colors when changing players
-            if (window.ColorManager && nextPlayer) {
-                window.ColorManager.updatePlayerColors(nextPlayer);
-            }
             
             // Check for game end
             const gameEnded = await this.checkGameEndConditions();
@@ -196,11 +177,6 @@ class GameBoard extends React.Component {
     async handleNegotiate() {
         // Implementation for negotiation
         console.log('Negotiate action triggered');
-        
-        // Reset dice system when negotiating
-        if (window.DiceSystem && window.DiceSystem.resetDice) {
-            window.DiceSystem.resetDice();
-        }
     }
     
     toggleInstructions() {
@@ -362,6 +338,9 @@ class GameBoard extends React.Component {
                 }, [
                     React.createElement(window.SpaceInfo, {
                         key: 'space-info'
+                    }),
+                    React.createElement(window.PlayerStatus, {
+                        key: 'player-status'
                     })
                 ]),
     
@@ -403,9 +382,6 @@ class GameBoard extends React.Component {
                     key: 'right-column',
                     className: 'game-column'
                 }, [
-                    React.createElement(window.PlayerStatus, {
-                        key: 'player-status'
-                    }),
                     React.createElement(window.DiceResult, {
                         key: 'dice-result'
                     }),

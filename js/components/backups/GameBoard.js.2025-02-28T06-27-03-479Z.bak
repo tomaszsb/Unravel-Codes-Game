@@ -155,21 +155,11 @@ class GameBoard extends React.Component {
         if (!currentPlayer) return;
         
         try {
-            // Reset dice system
-            if (window.DiceSystem && window.DiceSystem.resetDice) {
-                window.DiceSystem.resetDice();
-            }
-            
             // Commit any temporary state
             await window.PlayerProgressManager.commitTemporaryState(currentPlayer.name);
             
             // Move to next player
             const nextPlayer = window.GamePlayerManager.moveToNextPlayer();
-            
-            // Update player colors when changing players
-            if (window.ColorManager && nextPlayer) {
-                window.ColorManager.updatePlayerColors(nextPlayer);
-            }
             
             // Check for game end
             const gameEnded = await this.checkGameEndConditions();
@@ -196,11 +186,6 @@ class GameBoard extends React.Component {
     async handleNegotiate() {
         // Implementation for negotiation
         console.log('Negotiate action triggered');
-        
-        // Reset dice system when negotiating
-        if (window.DiceSystem && window.DiceSystem.resetDice) {
-            window.DiceSystem.resetDice();
-        }
     }
     
     toggleInstructions() {
@@ -362,6 +347,9 @@ class GameBoard extends React.Component {
                 }, [
                     React.createElement(window.SpaceInfo, {
                         key: 'space-info'
+                    }),
+                    React.createElement(window.PlayerStatus, {
+                        key: 'player-status'
                     })
                 ]),
     
@@ -403,9 +391,6 @@ class GameBoard extends React.Component {
                     key: 'right-column',
                     className: 'game-column'
                 }, [
-                    React.createElement(window.PlayerStatus, {
-                        key: 'player-status'
-                    }),
                     React.createElement(window.DiceResult, {
                         key: 'dice-result'
                     }),

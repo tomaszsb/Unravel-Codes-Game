@@ -1,0 +1,177 @@
+Work Type,Job Description,Estimated Job Costs
+General Construction,Lobby renovation and security upgrade for corporate headquarters,150000
+General Construction,Conversion of attic space into habitable loft in single-family home,80000
+General Construction,Installation of green wall and rooftop garden for eco-friendly office building,200000
+General Construction,Renovation of historic theater including restoration of ornate plasterwork,950000
+General Construction,Construction of new emergency department addition to existing hospital,4500000
+General Construction,Adaptive reuse of abandoned warehouse into mixed-use development,3000000
+General Construction,Energy-efficient retrofit of 1960s office building,1200000
+General Construction,Expansion of public library with new children's wing,2500000
+General Construction,Conversion of strip mall into senior living community,5000000
+General Construction,Restoration of fire-damaged apartment building,800000
+General Construction,Construction of rooftop amenity space for luxury condominium,600000
+General Construction,Renovation of industrial space into trendy restaurant,450000
+General Construction,Accessibility upgrades for historic courthouse,350000
+General Construction,Conversion of former school into affordable housing units,4000000
+General Construction,Facade restoration of Art Deco skyscraper,1800000
+General Construction,Construction of new visitor center for national park,2000000
+General Construction,Renovation of airport terminal for improved passenger flow,7500000
+General Construction,Conversion of big box store into indoor vertical farm,3500000
+General Construction,Seismic retrofit and renovation of city hall,6000000
+General Construction,Construction of new performing arts center on university campus,12000000
+General Construction,Renovation of historic hotel into boutique accommodation,5500000
+General Construction,Construction of new fire station with training facilities,3800000
+Plumbing,Installation of gray water recycling system for large apartment complex,350000
+Plumbing,Replacement of lead service lines for entire city block of rowhouses,500000
+Plumbing,New cryogenic piping system for research laboratory,180000
+Plumbing,Installation of solar thermal hot water system for hotel,120000
+Plumbing,Upgrade of plumbing fixtures to low-flow models in university dormitory,90000
+Plumbing,Installation of rainwater harvesting system for office park,280000
+Plumbing,Replacement of corroded plumbing stack in high-rise condominium,200000
+Plumbing,New medical gas system for hospital expansion,450000
+Plumbing,Installation of greywater system for public park irrigation,150000
+Plumbing,Upgrade of storm drainage system for large industrial site,320000
+Plumbing,New plumbing system for food processing facility,380000
+Plumbing,Installation of water treatment system for brewery,110000
+Plumbing,Replacement of aging sewer lines in historic district,600000
+Plumbing,New plumbing for green building with composting toilets,85000
+Plumbing,Installation of snowmelt system for pedestrian plaza,95000
+Plumbing,Upgrade of plumbing systems in century-old apartment building,250000
+Mechanical Systems,Installation of geothermal heating and cooling system for new school campus,2500000
+Mechanical Systems,Retrofit of existing HVAC system with UV air purification for medical facility,400000
+Mechanical Systems,New clean room HVAC system for semiconductor manufacturing plant,1800000
+Mechanical Systems,Installation of heat recovery ventilation system in passive house project,75000
+Mechanical Systems,Upgrade to variable refrigerant flow (VRF) system in boutique office building,350000
+Mechanical Systems,Installation of district heating system for university campus,3000000
+Mechanical Systems,New HVAC system for data center with hot aisle containment,1200000
+Mechanical Systems,Upgrade of mechanical systems in historic theater for improved acoustics,500000
+Mechanical Systems,Installation of energy-efficient HVAC system in green office tower,2000000
+Mechanical Systems,New mechanical systems for pharmaceutical clean room facility,1500000
+Mechanical Systems,Retrofit of chiller plant for improved energy efficiency in hospital,800000
+Sprinklers,Installation of water mist fire suppression system in data center,250000
+Sprinklers,Upgrade of sprinkler system to accommodate new mezzanine in warehouse,80000
+Sprinklers,Installation of foam sprinkler system in aircraft hangar,400000
+Sprinklers,Retrofit of residential high-rise with new NFPA 13R sprinkler system,1200000
+Sprinklers,Installation of specialized sprinkler system for art storage facility,150000
+Sprinklers,New sprinkler system for renovated historic theater,300000
+Sprinklers,Upgrade of sprinkler system in college dormitory to meet current codes,180000
+Sprinklers,Installation of pre-action sprinkler system in museum exhibit hall,220000
+Sprinklers,New sprinkler system for high-pile storage warehouse,500000
+Sprinklers,Retrofit of sprinkler system in parking garage,160000
+Structural,Seismic retrofit of unreinforced masonry building,800000
+Structural,Installation of tuned mass damper in slender high-rise building,1500000
+Structural,Structural reinforcement for rooftop helipad on hospital,600000
+Structural,Carbon fiber reinforcement of concrete beams in parking structure,250000
+Structural,Foundation stabilization using helical piers for settling historic building,180000
+Structural,Structural modifications to accommodate new atrium in office building,400000
+Structural,Strengthening of bridge structure for increased load capacity,1200000
+Structural,Installation of moment frames for open floor plan in retail space,150000
+Construction Fence,Installation of branded construction fence with public art for museum expansion,40000
+Construction Fence,Noise-reducing acoustic fence for urban construction site,55000
+Construction Fence,Temporary fence with integrated security cameras for high-security project,75000
+Construction Fence,Installation of living green construction fence for eco-friendly development,45000
+Construction Fence,Modular reusable fencing system for multi-phase campus construction,90000
+Construction Fence,Wind-resistant fencing for high-rise construction in coastal area,65000
+Construction Fence,Custom-designed construction fence for high-profile urban project,80000
+Sidewalk Shed,Installation of sidewalk shed with solar-powered lighting for long-term project,85000
+Sidewalk Shed,Heavy-duty sidewalk shed for demolition of 30-story building,200000
+Sidewalk Shed,Sidewalk shed with heat tracing for winter construction project,110000
+Sidewalk Shed,Custom-designed sidewalk shed to maintain retail visibility during construction,95000
+Sidewalk Shed,Sidewalk shed with integrated public art installation,70000
+Sidewalk Shed,High-capacity sidewalk shed for major facade restoration project,150000
+Supported Scaffold,Installation of suspended scaffold system for bridge maintenance,120000
+Supported Scaffold,Multi-point suspended scaffold for high-rise window replacement,180000
+Supported Scaffold,Cantilever scaffold system for overhanging structure renovation,95000
+Supported Scaffold,Interior scaffold system for cathedral ceiling restoration,85000
+Supported Scaffold,Scaffold system with debris netting for facade cleaning project,70000
+Antenna,Installation of 5G small cell antennas on utility poles throughout downtown,200000
+Antenna,Upgrade of television broadcast antenna on skyscraper,350000
+Antenna,New rooftop cellular antenna array for improved coverage in suburban area,120000
+Antenna,Installation of long-range Wi-Fi antennas for rural broadband project,180000
+Boiler Equipment,Replacement of coal-fired boiler with high-efficiency natural gas system,600000
+Boiler Equipment,Installation of biomass boiler for district heating system,800000
+Boiler Equipment,Upgrade of industrial boiler to meet new emissions standards,450000
+Boiler Equipment,Installation of condensing boilers for large office complex,350000
+Sign,Design and installation of digital billboard on highway,250000
+Sign,Custom neon sign creation for historic theater restoration,75000
+Sign,Installation of wayfinding signage system for university campus,120000
+Solar,Large-scale solar array installation for shopping center,500000
+Solar,Integrated solar roof tiles for new residential development,350000
+Standpipe,Installation of new standpipe system in high-rise residential building,280000
+Protection and Mechanical Methods,Installation of hydraulic shores for deep excavation support,80000
+Curb Cut,Creation of ADA-compliant curb cut with tactile warning surface,18000
+Earth Work,Site preparation and terracing for hillside vineyard development,95000
+Full Demolition,Implosion of obsolete 20-story office tower in urban center,1500000
+Support of Excavation,Installation of secant pile wall for below-grade parking structure,450000
+Foundation,Construction of mat foundation for new wind turbine,750000
+Alteration,Conversion of former industrial loft into co-working space,280000
+Fire Suppression,Installation of FM-200 fire suppression system in server room,85000
+Demolition & Removal,Surgical demolition of interior for historical building adaptive reuse,110000
+Fuel Storage,Installation of biodiesel fuel storage and dispensing system for fleet vehicles,95000
+Electrical,Implementation of smart grid technology for university campus,500000
+Construction Equipment,Setup of gantry crane system for precast concrete installation,350000
+Chute,Installation of automated waste sorting and recycling chute system,70000
+Fence,Installation of wildlife exclusion fence for airport runway,120000
+Earthwork Only,Creation of artificial wetland for stormwater management,180000
+Partitions,Installation of acoustic movable partitions in conference center,110000
+Marquees,Design and installation of interactive LED marquee for arts center,150000
+BPP (Builder Pavement Plan),Implementation of permeable paving system for eco-friendly streetscape,200000
+New Building,Construction of net-zero energy certified office building,15000000
+Equipment Work,Installation of automated material handling system in distribution center,800000
+Fire Alarm,Implementation of voice evacuation system in large shopping mall,250000
+Combined,Comprehensive life safety upgrade package for university dormitory complex,2000000
+Limited Alteration Application,Installation of energy-efficient lighting system in retail store,25000
+Temporary Place of Assembly,Setup of temporary ice skating rink with associated structures in public park,180000
+Elevator,Installation of destination dispatch elevator system in office high-rise,1200000
+Place of Assembly,Conversion of abandoned factory into multi-use performance arts center,5000000
+Fuel Burning,Installation of cogeneration system for district heating and power,3500000
+General Construction,Renovation of subway station for improved accessibility,8500000
+General Construction,Construction of green roof on existing convention center,1500000
+General Construction,Conversion of parking garage into urban farming facility,2800000
+General Construction,Restoration of historic lighthouse and keeper's quarters,950000
+General Construction,Construction of net-zero energy public library,6500000
+General Construction,Renovation of sports arena for improved spectator experience,12000000
+General Construction,Adaptive reuse of power plant into contemporary art museum,9000000
+General Construction,Construction of wildlife crossing bridge over highway,4500000
+General Construction,Renovation of cruise ship terminal for increased capacity,7000000
+General Construction,Construction of modular affordable housing development,5500000
+General Construction,Retrofit of office tower for post-pandemic workplace design,3200000
+General Construction,Renovation of former post office into food hall,2500000
+General Construction,Construction of disaster-resistant community center,3800000
+General Construction,Adaptive reuse of grain silo into rock climbing facility,1800000
+General Construction,Renovation of historic train station into boutique hotel,6800000
+General Construction,Construction of floating pedestrian bridge in city park,4200000
+General Construction,Conversion of big box store into e-commerce fulfillment center,3500000
+General Construction,Renovation of former church into community arts center,2200000
+General Construction,Construction of eco-friendly car wash facility,950000
+General Construction,Adaptive reuse of shipping containers for retail pop-up village,1500000
+General Construction,Renovation of zoo exhibits for improved animal welfare,5800000
+Plumbing,Installation of water reclamation system for car wash facility,180000
+Plumbing,New plumbing systems for floating home community,420000
+Plumbing,Installation of vacuum waste collection system for airport terminal,750000
+Plumbing,Upgrade of plumbing fixtures in sports stadium for water conservation,280000
+Plumbing,New hot water distribution system for large hospital complex,550000
+Plumbing,Installation of radiant floor heating system in luxury home,95000
+Plumbing,Replacement of aging water mains in downtown business district,1200000
+Mechanical Systems,Installation of displacement ventilation system in lecture hall,250000
+Mechanical Systems,New HVAC system with thermal energy storage for office complex,1800000
+Mechanical Systems,Installation of radiant cooling system in airport terminal,2200000
+Mechanical Systems,Upgrade of mechanical systems in high-security government facility,1500000
+Mechanical Systems,New HVAC system for indoor vertical farming facility,900000
+Sprinklers,Installation of deluge sprinkler system in aircraft maintenance hangar,550000
+Sprinklers,New sprinkler system for high-ceiling atrium in shopping mall,320000
+Sprinklers,Upgrade of sprinkler system in historic library with rare book collection,280000
+Sprinklers,Installation of dry pipe sprinkler system in cold storage warehouse,420000
+Sprinklers,New sprinkler system for multi-story car park,380000
+Structural,Structural reinforcement of dam for increased water capacity,2800000
+Structural,Installation of base isolation system for earthquake protection in hospital,3500000
+Structural,Structural modifications to support green roof on existing building,750000
+Construction Fence,Installation of digital display construction fence for public information,110000
+Construction Fence,Blast-resistant temporary fencing for demolition project,95000
+Sidewalk Shed,Sidewalk shed with integrated public seating and planters,130000
+Supported Scaffold,Temporary work platforms for clock tower restoration,140000
+Antenna,Installation of emergency communication antenna system for first responders,280000
+Boiler Equipment,Installation of dual-fuel boiler system for increased resilience,520000
+Sign,Creation of kinetic facade signage for entertainment district,420000
+Solar,Installation of solar canopy over parking lot with EV charging stations,680000
+Standpipe,Upgrade of standpipe system in high-rise to support higher pressure requirements,350000

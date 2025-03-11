@@ -1,0 +1,50 @@
+Card Name,Effect,Flavor Text
+Neighborly Complaints,The next inspection takes 3 additional ticks.,Nearby residents voice concerns about noise and dust prompting more thorough inspections.
+Economic Downturn,All permit and inspection times increase by 2 ticks for the next 3 turns.,A slowdown in the economy leads to budget cuts and staffing shortages at the permit office.
+New Safety Regulations,All players must discard 1 Expeditor card. All inspections take 3 additional ticks this turn.,Stricter safety rules require expeditors to update their filings and prepare for lengthier inspections.
+Labor Strike,All construction times increase by 4 ticks for the next 2 turns.,A strike by construction workers leads to significant project delays.
+Positive Press,The current high-profile client filing takes 3 ticks less time. Draw 1 Expeditor Card.,Favorable media coverage puts pressure on officials to approve a noteworthy project quickly.
+Unexpected Archeological Find,If a filing involves excavation increase its time by 6 ticks.,The discovery of archeological artifacts during excavation necessitates a lengthy review process.
+Zoning Variance Required,The current filing takes 4 ticks more time. Draw 1 Expeditor Card.,The project requires a zoning variance adding an extra layer of bureaucracy.
+Materials Shortage,All players' current construction phase takes 3 ticks more time.,A shortage of key building materials slows down construction across the city.
+NIMBY Lawsuit,"Roll a die. On 1-3, the project is high-profile; increase the current filing time by 5 ticks. On 4-6, no effect.",A 'Not In My Backyard' lawsuit by neighbors challenges the project delaying permit approval.
+City Council Allies,The current permit filing takes 2 ticks less time. Draw 1 Expeditor Card.,Supportive city council members use their influence to streamline the permit process.
+Holiday Rush,All filing times increase by 2 ticks this turn.,Many clients want projects approved before the holidays overwhelming expeditors.
+Soil Contamination,If the current project involves groundwork increase the filing time by 4 ticks.,The discovery of contaminated soil requires additional environmental studies.
+Endangered Species Habitat,"Roll a die. On 1-3, the project is in a designated habitat area; increase the permit filing time by 6 ticks. On 4-6, no effect.",The presence of an endangered species complicates the approval process.
+Funding Delay,Skip your next turn.,A delay in project financing forces a pause in the filing process.
+Annexation,The current filing takes 5 ticks more time but the player's next turn takes 2 ticks less time.,The project area is annexed by the city leading to jurisdiction changes and future streamlining.
+Expeditor Lobbying,The next inspection takes 2 ticks less time. Discard 1 Expeditor card.,Expeditors successfully lobby for more efficient inspection processes but some shady deals are made.
+Neighborhood Revitalization,"Roll a die. On 1-3, the project is in a targeted revitalization area; reduce the permit filing time by 3 ticks. On 4-6, no effect.",City initiatives to improve certain neighborhoods lead to expedited approvals.
+Bribery Scandal,All permit filing times increase by 2 ticks for the next 3 turns.,A bribery scandal involving city officials leads to increased scrutiny and slower approvals.
+Planning Department Backlog,The current filing takes 3 ticks more time.,An influx of filings creates a backlog at the planning department.
+Building Code Update,All inspection times increase by 2 ticks for the next 2 turns.,A building code update requires expeditors to adjust their inspection preparations.
+High-Profile Client,The current filing time is reduced by 4 ticks. All other players' current filing time increases by 1 tick.,Expectations are high for a notable client's project so it gets prioritized much to other expeditors' chagrin.
+Economic Boom,All construction times decrease by 2 ticks for the next 3 turns.,A thriving economy boosts construction productivity.
+Project Redesign,The current filing is delayed indefinitely. Discard 2 Expeditor cards.,The client requests a major redesign sending the expeditor back to square one.
+Expeditor Conference,Skip this turn. Draw 2 Expeditor Cards.,The expeditor attends an industry conference to network and learn but no filings get done.
+Celebrity Endorsement,"Roll a die. On 1-3, the project is high-profile; reduce the permit filing time by 4 ticks. On 4-6, no effect.",A celebrity publicly endorses the project accelerating the approval process.
+Community Outreach,All permit filing times decrease by 1 tick this turn.,Proactive community outreach by expeditors improves neighborhood relations.
+Permit Office Upgrade,All players' current filing times decrease by 2 ticks.,Improved technology at the permit office increases efficiency.
+Surprise Inspection,The next inspection takes 4 ticks more time.,An unannounced inspection catches the project team off-guard.
+Utility Delay,If the project requires utility hookups increase the filing time by 3 ticks.,Bureaucratic issues with utility companies delay necessary hookups.
+Cybersecurity Breach,All filing times increase by 1 tick for the next 2 turns.,A data breach at the permit office disrupts normal operations.
+Permit Fee Hike,The current permit filing costs 2 extra resources but takes 2 ticks less time.,Increased permit fees allow the office to hire more staff and decrease processing times.
+Diversity Initiative,"Roll a die. On 1-3, the project team is diverse; reduce the inspection time by 2 ticks. On 4-6, no effect.",City officials are impressed by the project team's diversity and make inspections a priority.
+Worksite Injury,All construction times increase by 3 ticks this turn.,An injury at a project worksite leads to safety investigations and work stoppages.
+Natural Disaster,All filing and inspection times increase by 4 ticks for the next 2 turns.,A severe storm causes damage and delays throughout the city.
+Expeditor Quits,Skip your next turn. Discard 2 Expeditor cards.,A key expeditor quits without notice leaving their projects in limbo.
+City Budget Surplus,All permit filing times decrease by 2 ticks this turn.,A city budget surplus allows permit offices to extend their hours.
+Affordable Housing Initiative,"Roll a die. On 1-3, the project includes affordable housing; reduce the permit filing time by 5 ticks. On 4-6, no effect.",New policies fast-track affordable housing projects.
+Intern Error,The current filing time increases by 2 ticks.,A mistake by a new expeditor intern causes a minor delay.
+Rezoning Request,The current filing time increases by 3 ticks. Draw 1 Expeditor Card.,A rezoning request complicates the project but may open up future opportunities.
+Historical Preservation,"Roll a die. On 1-3, the project involves a historic building; increase the filing time by 4 ticks. On 4-6, no effect.",Extra care is required to get approval for changes to a historic building.
+Competing Projects,Ask each other player about their current worktypes. If any player has the same worktype as you increase your filing time by 2 ticks.,Competition for limited city resources slows down similar projects.
+Sister City Collaboration,All players' current filing times decrease by 1 tick.,A delegation from a sister city shares their best practices for efficient permitting.
+Green Building Bonus,"Roll a die. On 1-3, the project is LEED certified; reduce the total filing time by 3 ticks. On 4-6, no effect.",The city offers incentives for environmentally friendly construction projects.
+State Funding,The current high-profile project filing time is reduced by 4 ticks.,The state provides extra funding to speed up a significant local project.
+Mayor's Pet Project,"Roll a die. On 1-3, the mayor expresses interest in the project; reduce its filing time by 5 ticks. On 4-6, no effect.",Mayoral attention dramatically accelerates a project.
+Expeditor Awards,The player with the most completed projects reduces their current filing time by 4 ticks.,An expeditor's association recognizes the city's top performer lending them extra credibility.
+Political Gridlock,All filing times increase by 1 tick for the next 5 turns.,A contentious election leads to political paralysis and government inefficiencies.
+Graft Investigation,All permit filings are halted for 1 turn while players discard half their Expeditor cards.,Authorities investigate widespread corruption bringing permitting to a standstill.
+Permitting Process Overhaul,All filing times are reduced by 2 ticks for the remainder of the game. Each player draws 1 Expeditor Card.,The city unveils a long-awaited streamlining of the permitting process.

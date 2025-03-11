@@ -3,5 +3,6 @@ desktop.ini
 Thumbs.db
 ehthumbs.db
 $RECYCLE.BIN/
+.tmp.driveupload
 
 find . -name "desktop.ini" -type f -delete

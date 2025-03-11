@@ -6,6 +6,11 @@ const LeftColumn = ({ currentPlayer, gameState }) => {
     const spaceData = window.GameDataManager.getSpaceData(currentSpace);
     
     return React.createElement('div', { className: 'left-column' }, [
+        // Card Management Component
+        React.createElement(window.CardManagementComponent, {
+            key: 'card-management',
+            playerName: currentPlayer.name
+        }),
         // Space info section
         React.createElement('div', {
             key: 'space-info',

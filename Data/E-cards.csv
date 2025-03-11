@@ -1,0 +1,75 @@
+Card Name,Effect,Flavor Text,Color,Phase
+Expedited Review,The current review phase takes 1 tick less time.,Your expeditor calls in a favor to get your filing moved to the top of the review pile.,Red,Regulatory Review
+Filing Error,Increase the time for the current filing by 3 ticks.,A small mistake by the expeditor leads to your filing being returned for corrections.,Red,Regulatory Review
+Efficiency Boost,Reduce your current filing time by 3 ticks.,Your expeditor streamlines the filing process improving overall efficiency.,Red,Regulatory Review
+Extended Wait Time,Increase your current filing time by 4 ticks.,Your usual expeditor is out sick resulting in unexpected delays.,Red,Regulatory Review
+Rush Processing,"Complete the current filing immediately, skipping up to 5 ticks.",Your expeditor pulls some strings to get your filing processed ASAP.,Red,Regulatory Review
+Regulatory Slowdown,Your current filing takes 2 ticks more time.,New regulations create additional red tape slowing down your expeditor.,Red,Regulatory Review
+Expeditor's Insight,"Draw 2 Expeditor Cards, then discard 1 Expeditor Card.",Your expeditor provides valuable guidance helping you make informed decisions.,All Colors,Any Phase
+Overtime,Pay a junior expeditor ($1000) to reduce the current filing time by 2 ticks.,Working late the expeditor manages to shave off some time.,All Colors,Any Phase
+Favor Called In,"Choose an opponent. Their current filing takes 2 ticks more time, your current filing takes 2 ticks less time.",Your expeditor calls in a favor impacting both you and your rival.,Red,Regulatory Review
+Batch Processing,Reduce your current filing time by 2 ticks.,Your expeditor finds a way to process multiple filings together.,Red,Regulatory Review
+Permit Expedited,"Roll a die. On 1-3, reduce processing time by 4 ticks. On 4-6, no effect.",Your expeditor greases the wheels to get your permit fast-tracked.,Red,Regulatory Review
+Paperwork Snag,Discard 1 Expeditor Card or the current filing takes 1 tick more time.,A paperwork issue threatens to delay the filing.,Red,Regulatory Review
+Redundant Requests,All players' current filing takes 2 ticks more time.,Multiple expeditors accidentally submit the same filing causing confusion.,Red,Regulatory Review
+Express Delivery,Reduce the current filing time by 2 ticks but skip your next turn.,You pay for express delivery but it throws off your schedule.,Red,Regulatory Review
+Canceled Appointment,Increase the current filing time by 1 tick and draw 1 Expeditor Card.,A canceled meeting with an official delays the filing but provides time to prepare.,Red,Regulatory Review
+Routine Procedure,"Roll a die. On 1-3, the last filing was the same type; reduce the current filing time by 1 tick. On 4-6, no effect.",Familiarity with the process leads to a small time reduction.,Red,Regulatory Review
+Double Check,Pay a junior expeditor ($1000) to reduce the chance of a random filing error by 50% this turn.,Taking time to thoroughly review the filing now can prevent issues later.,Red,Regulatory Review
+Inside Connection,Reduce the current filing time by 2 ticks.,Who you know can make all the difference in getting things expedited.,Red,Regulatory Review
+Complex Filing,Increase the current filing time by 4 ticks but pay two subject matter experts ($4000).,The expeditor handles an especially complex filing but charges extra.,Red,Regulatory Review
+Expeditor Training,Reduce the current filing time by 1 tick for each Expeditor Card played this turn.,Investing in expeditor training pays off with increased efficiency.,All Colors,Any Phase
+Delayed Expeditor,Increase your current filing time by 4 ticks.,Your usual expeditor is temporarily reassigned causing delays.,Red,Regulatory Review
+Expeditor Lunch Meeting,Reduce your current filing time by 1 tick and the next player's current filing time by 1 tick.,Productive discussion over lunch benefits both parties' filings.,Red,Regulatory Review
+On the Radar,"Roll a die. On 1-3, the current filing is for a high-profile client; reduce its time by 2 ticks. On 4-6, no effect.",The expeditor prioritizes the filing knowing that important people are watching.,Red,Regulatory Review
+Return to Sender,Return target Expeditor Card to its owner's hand.,The expeditor proactively resolves an error before it causes a delay.,All Colors,Any Phase
+Red Tape Reduction,Your current filing takes 1 tick less time.,A regulatory change temporarily reduces bureaucratic hurdles.,Red,Regulatory Review
+Benefit Verification,"Roll a die. On 1-3, reduce your current filing time by 2 ticks. On 4-6, no effect.",Consistent filing types enable shortcuts in the process.,Red,Regulatory Review
+Early Submission,Reduce the current filing time by 1 tick. Draw 1 Expeditor Card.,The expeditor gets a head start on the filing.,Red,Regulatory Review
+Fact Checking,Skip this turn. Reduce the current filing time by 4 ticks.,Time spent upfront verifying information saves time later.,Yellow,Design
+Weekend Work,Reduce the current filing time by 3 ticks but skip your next turn.,Working over the weekend gets it done faster but postpones other tasks.,All Colors,Any Phase
+Time Crunch,Skip your next turn. Then reduce your current filing time by 5 ticks.,The expeditor works extraordinarily hard now to free up time later.,All Colors,Any Phase
+Review Request,All players must increase their current filing time by 1 tick.,One expeditor's request for a review slows down everyone's filing.,Red,Regulatory Review
+Team Effort,You and target player each reduce your current filing times by 2 ticks then discard 1 Expeditor Card.,Collaborating with another expeditor proves mutually beneficial.,All Colors,Any Phase
+Audit Preparation,"Roll a die. On 1-3, reduce your current filing time by 2 ticks. On 4-6, increase your current filing time by 2 ticks.",Proactive preparation for an audit takes time but pays off.,Red,Regulatory Review
+Approved Template,Reduce your current filing time by 2 ticks. All other players may reduce their current filing time by 1 tick.,The expeditor creates a reusable template saving time for everyone.,Red,Regulatory Review
+Electronic Submission,Reduce the current filing time by 1 tick. Draw 1 Expeditor Card.,Submitting electronically saves a bit of time and provides an opportunity for another task.,Red,Regulatory Review
+Press Release,"If the current client is high-profile, reduce the filing time by 3 ticks.",Announcing the filing to the media puts pressure on officials to expedite.,Red,Regulatory Review
+Expeditor Mentor,Reduce the current filing time by 1 tick for each Expeditor Card played this turn.,Learning from a senior expeditor compounds the time savings.,All Colors,Any Phase
+Surge Pricing,Pay three junior expeditors ($3000) to reduce the current filing time by 3 ticks.,Rush jobs come at a premium but can be worth it.,All Colors,Any Phase
+Policy Change,Increase all players' current filing times by 1 tick.,Adapting to a sudden policy change slows everyone down temporarily.,Red,Regulatory Review
+Bulk Discount,"If 3+ permits are filed this turn, reduce their filing times by 1 tick each.",The expeditor secures a discount for handling multiple permits at once.,Red,Regulatory Review
+Process Improvement,Reduce your current filing time by 6 ticks.,The expeditor discovers a way to optimize the filing process.,All Colors,Any Phase
+Courier Delay,Increase the current filing time by 2 ticks. Draw 1 Expeditor Card.,A delay in delivering physical documents allows time to work on something else.,Red,Regulatory Review
+Rejected Filing,Increase the current filing time by 4 ticks. Discard 1 Expeditor Card.,Rejection by the authorities means starting over and losing progress on another task.,Red,Regulatory Review
+Appeal Process,"If your filing was previously rejected, reduce the current filing time by 3 ticks.",The expeditor's quick appeal gets the filing back on track.,Red,Regulatory Review
+Permit Pre-Approval,Choose a permit type. The current permit filing of that type takes 4 ticks less time.,Advance approval streamlines the actual permit filing process.,Yellow,Design
+Expeditor's Assistant,Reduce the current filing time by 1 tick. Draw 1 Expeditor Card.,An assistant expeditor helps with routine tasks freeing up time for the lead expeditor.,All Colors,Any Phase
+Final Push,Reduce the time for the final inspection by 3 ticks.,Your expeditor pulls an all-nighter to ensure everything is perfect for the final inspection.,Purple,Construction
+Streamlined Closeout,Reduce the time for project closeout paperwork by 2 ticks and draw 1 Expeditor Card.,Your expeditor's meticulous record-keeping pays off making the final paperwork a breeze.,Purple,Construction
+Safety Inspection Prep,Reduce time for next safety inspection by 2 ticks.,Your expeditor's thorough preparation ensures a smooth inspection process.,Purple,Construction
+Equipment Rush Order,Pay $2000 to reduce construction time by 4 ticks.,Your expeditor leverages connections to get critical equipment delivered faster.,Purple,Construction
+Permit Extension,Extend current construction permit by 10 ticks.,Your expeditor secures a last-minute extension on a nearly expired permit.,Purple,Construction
+Site Logistics Optimization,Reduce construction time by 3 ticks.,Your expeditor reorganizes the construction site for maximum efficiency.,Purple,Construction
+Overtime Approval,Pay $3000 to reduce construction time by 6 ticks.,Your expeditor negotiates approval for extended work hours.,Purple,Construction
+Inspection Scheduling,Advance your place in the inspection queue by 5 ticks.,Your expeditor's persistence secures an earlier inspection slot.,Purple,Construction
+Change Order Expedite,Reduce time for processing a change order by 3 ticks.,Your expeditor fast-tracks a critical change order through the system.,Purple,Construction
+Weather Mitigation Plan,Prevent a 2-tick delay due to adverse weather conditions.,Your expeditor's foresight in weather planning keeps the project on track.,Purple,Construction
+Zoning Variance Fast Track,Reduce time for zoning variance approval by 4 ticks.,Your expeditor's knowledge of local zoning laws speeds up the process.,Yellow,Design
+Design Team Coordination,Reduce design phase time by 3 ticks.,Your expeditor facilitates smoother communication between design team members.,Yellow,Design
+Code Compliance Review,Prevent a potential 3-tick delay from code violations.,Your expeditor's thorough review catches potential issues early.,Yellow,Design
+Sustainable Design Incentive,Reduce design time by 2 ticks for incorporating green features.,Your expeditor secures fast-track processing for sustainable designs.,Yellow,Design
+Historic Preservation Consult,Reduce design review time by 3 ticks for projects in historic districts.,Your expeditor's expertise in historical regulations proves invaluable.,Yellow,Design
+BIM Integration,Reduce overall design time by 4 ticks.,Your expeditor implements Building Information Modeling to streamline the design process.,Yellow,Design
+Value Engineering Session,Reduce design costs by $2000 and design time by 2 ticks.,Your expeditor organizes a productive value engineering workshop.,Yellow,Design
+Peer Review Acceleration,Reduce peer review process time by 3 ticks.,Your expeditor arranges for an expedited peer review of the design.,Yellow,Design
+Grant Application Expedite,Reduce time for grant application processing by 3 ticks.,Your expeditor's knowledge of grant requirements speeds up the process.,Green,Funding
+Investor Pitch Preparation,Gain 1 extra die throw this turn if you do not like the outcome of first throw.,Your expeditor helps craft a compelling presentation for potential investors.,Green,Funding
+Tax Incentive Research,Reduce project costs by 10% through identified tax incentives.,Your expeditor uncovers applicable tax incentives for the project.,Green,Funding
+Loan Approval Acceleration,Reduce loan approval time by 4 ticks.,Your expeditor's relationship with lenders helps speed up the approval process.,Green,Funding
+Crowdfunding Campaign Boost,Gain an extra $10000 in funding this turn.,Your expeditor's social media savvy gives your crowdfunding campaign a boost.,Green,Funding
+Escrow Resolution,Release $5000 from escrow immediately.,Your expeditor navigates complex escrow requirements to free up funds.,Green,Funding
+Capital Stack Optimization,Reduce interest payments by $2000.,Your expeditor restructures the project's capital stack for better terms.,Green,Funding
+Brownfield Remediation Fund,Secure an additional $4000 for site cleanup.,Your expeditor identifies and secures special funding for contaminated site development.,Green,Funding
+Historic Tax Credit Application,Reduce renovation costs by $3000 for qualifying historic buildings.,Your expeditor navigates the complex process of applying for historic tax credits.,Green,Funding
+Public-Private Partnership,Secure $5000 in public funds for the project.,Your expeditor brokers a beneficial public-private partnership agreement.,Green,Funding

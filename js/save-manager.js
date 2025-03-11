@@ -11,7 +11,9 @@ class SaveManager {
             'spaces',
             'diceRoll',
             'progressState',
-            'visitHistory'
+            'visitHistory',
+            'playerCards',
+            'cardHistory'
         ]);
         // Define validation schemas for each data type
         this.validationSchemas = {
@@ -122,6 +124,9 @@ class SaveManager {
         this.cleanupOldVersions();
         this.initializeCache();
         this.dataTypes.add('finishedPlayers');
+        
+        // Add card validation schema
+        this.validationSchemas['playerCards'] = (data) => this.validatePlayerCards(data);
     }
 
     // Initialize cache with existing data
@@ -434,8 +439,31 @@ class SaveManager {
         }
     }
 
-    // Validate progress state structure
-    validateProgressState(state) {
+    // Validate player cards structure
+validatePlayerCards(playerCards) {
+    if (!playerCards || typeof playerCards !== 'object') {
+        throw new Error('Invalid player cards structure');
+    }
+    
+    // Check each player's card collection
+    Object.entries(playerCards).forEach(([playerName, cards]) => {
+        if (!cards || typeof cards !== 'object') {
+            throw new Error(`Invalid card collection for player ${playerName}`);
+        }
+        
+        // Check each card type
+        ['B', 'I', 'W', 'L', 'E'].forEach(cardType => {
+            if (!Array.isArray(cards[cardType])) {
+                throw new Error(`Invalid ${cardType} cards for player ${playerName}`);
+            }
+        });
+    });
+    
+    return true;
+}
+
+// Validate progress state structure
+validateProgressState(state) {
         if (!state || typeof state !== 'object') {
             throw new Error('Invalid progress state structure');
         }
@@ -491,6 +519,42 @@ class SaveManager {
 
     // Validate game position
     // In SaveManager class
+
+/**
+ * Initialize player card collections
+ * @param {Array} players - Player array
+ * @returns {Promise<boolean>} Success status
+ */
+async initializePlayerCards(players) {
+    if (!Array.isArray(players) || players.length === 0) {
+        throw new Error('Invalid player data for card initialization');
+    }
+    
+    // Create empty card collections for each player
+    const playerCards = {};
+    
+    players.forEach(player => {
+        playerCards[player.name] = {
+            B: [], // Bank/Funding cards
+            I: [], // Investment cards
+            W: [], // Work/scope cards
+            L: [], // Life event cards
+            E: []  // Expert help cards
+        };
+    });
+    
+    // Save card collections
+    const saveSuccess = await this.save('playerCards', playerCards);
+    
+    // Initialize card history
+    await this.save('cardHistory', {
+        drawn: {},
+        played: {},
+        discarded: {}
+    });
+    
+    return saveSuccess;
+}
 
 async createInitialProgressState(players) {
     if (!Array.isArray(players) || players.length === 0) {
@@ -764,6 +828,9 @@ isValidGamePosition(position, currentPosition = null) {
     
         // Reset visit history for new game
         await this.save('visitHistory', {});
+        
+        // Initialize player card collections
+        await this.initializePlayerCards(players);
         
         // Initialize finished players set
         await this.save('finishedPlayers', []);
@@ -1174,7 +1241,201 @@ isValidGamePosition(position, currentPosition = null) {
         }
     }
 
-    async verifyCompleteGameState() {
+    /**
+ * Add a card to a player's collection
+ * @param {string} playerName - Player name
+ * @param {Object} card - Card object to add
+ * @returns {Promise<boolean>} Success status
+ */
+async addPlayerCard(playerName, card) {
+    if (!playerName || !card || !card.type) {
+        console.error('SaveManager: Invalid parameters for addPlayerCard');
+        return false;
+    }
+    
+    try {
+        // Load current player cards
+        const playerCards = this.load('playerCards') || {};
+        
+        // Initialize player's collection if needed
+        if (!playerCards[playerName]) {
+            playerCards[playerName] = {
+                B: [], I: [], W: [], L: [], E: []
+            };
+        }
+        
+        // Add card to the appropriate collection
+        if (!Array.isArray(playerCards[playerName][card.type])) {
+            playerCards[playerName][card.type] = [];
+        }
+        
+        // Add the card if it doesn't already exist
+        const exists = playerCards[playerName][card.type].some(c => c.id === card.id);
+        if (!exists) {
+            playerCards[playerName][card.type].push(card);
+        }
+        
+        // Save updated player cards
+        const saveSuccess = await this.save('playerCards', playerCards);
+        
+        // Update card history
+        await this.updateCardHistory('drawn', playerName, card);
+        
+        return saveSuccess;
+    } catch (error) {
+        console.error('SaveManager: Error adding player card:', error);
+        return false;
+    }
+}
+
+/**
+ * Remove a card from a player's collection
+ * @param {string} playerName - Player name
+ * @param {Object} card - Card object to remove
+ * @param {string} reason - Reason for removal ('played' or 'discarded')
+ * @returns {Promise<boolean>} Success status
+ */
+async removePlayerCard(playerName, card, reason = 'played') {
+    if (!playerName || !card || !card.type) {
+        console.error('SaveManager: Invalid parameters for removePlayerCard');
+        return false;
+    }
+    
+    try {
+        // Load current player cards
+        const playerCards = this.load('playerCards') || {};
+        
+        // Skip if player doesn't exist or has no cards
+        if (!playerCards[playerName] || !playerCards[playerName][card.type]) {
+            return false;
+        }
+        
+        // Find the card in the player's collection
+        const cardIndex = playerCards[playerName][card.type].findIndex(c => c.id === card.id);
+        
+        // Remove the card if found
+        if (cardIndex !== -1) {
+            playerCards[playerName][card.type].splice(cardIndex, 1);
+            
+            // Save updated player cards
+            const saveSuccess = await this.save('playerCards', playerCards);
+            
+            // Update card history
+            await this.updateCardHistory(reason, playerName, card);
+            
+            return saveSuccess;
+        }
+        
+        return false;
+    } catch (error) {
+        console.error('SaveManager: Error removing player card:', error);
+        return false;
+    }
+}
+
+/**
+ * Update card history with a new action
+ * @param {string} action - Action type ('drawn', 'played', 'discarded')
+ * @param {string} playerName - Player name
+ * @param {Object} card - Card object
+ * @returns {Promise<boolean>} Success status
+ */
+async updateCardHistory(action, playerName, card) {
+    try {
+        // Load current card history
+        const cardHistory = this.load('cardHistory') || {
+            drawn: {},
+            played: {},
+            discarded: {}
+        };
+        
+        // Initialize history for this player if needed
+        if (!cardHistory[action][playerName]) {
+            cardHistory[action][playerName] = [];
+        }
+        
+        // Add the card action to history with timestamp
+        cardHistory[action][playerName].push({
+            card: card,
+            timestamp: Date.now()
+        });
+        
+        // Save updated history
+        return await this.save('cardHistory', cardHistory);
+    } catch (error) {
+        console.error(`SaveManager: Error updating card history for ${action}:`, error);
+        return false;
+    }
+}
+
+/**
+ * Get all cards for a player
+ * @param {string} playerName - Player name
+ * @returns {Object|null} Player's cards or null if not found
+ */
+getPlayerCards(playerName) {
+    if (!playerName) {
+        return null;
+    }
+    
+    const playerCards = this.load('playerCards');
+    return playerCards?.[playerName] || null;
+}
+
+/**
+ * Get cards of a specific type for a player
+ * @param {string} playerName - Player name
+ * @param {string} cardType - Card type code (B, I, W, L, E)
+ * @returns {Array|null} Player's cards of the specified type
+ */
+getPlayerCardsByType(playerName, cardType) {
+    if (!playerName || !cardType) {
+        return null;
+    }
+    
+    const playerCards = this.load('playerCards');
+    return playerCards?.[playerName]?.[cardType] || null;
+}
+
+/**
+ * Check if a player has a specific card
+ * @param {string} playerName - Player name
+ * @param {Object} card - Card to check for
+ * @returns {boolean} Whether the player has the card
+ */
+playerHasCard(playerName, card) {
+    if (!playerName || !card || !card.type || !card.id) {
+        return false;
+    }
+    
+    const playerCards = this.load('playerCards');
+    return !!playerCards?.[playerName]?.[card.type]?.some(c => c.id === card.id);
+}
+
+/**
+ * Get card history for a player
+ * @param {string} playerName - Player name
+ * @returns {Object|null} Player's card history
+ */
+getPlayerCardHistory(playerName) {
+    if (!playerName) {
+        return null;
+    }
+    
+    const cardHistory = this.load('cardHistory') || {
+        drawn: {},
+        played: {},
+        discarded: {}
+    };
+    
+    return {
+        drawn: cardHistory.drawn[playerName] || [],
+        played: cardHistory.played[playerName] || [],
+        discarded: cardHistory.discarded[playerName] || []
+    };
+}
+
+async verifyCompleteGameState() {
         try {
             // Step 1: Load and verify all required data types
             const players = this.load('players');

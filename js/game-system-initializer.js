@@ -41,6 +41,11 @@ window.GameSystemInitializer = {
             
             // Step 5: Initialize PlayerManager
             console.log('Initializing PlayerManager...');
+            console.log('PlayerManager availability check:', { 
+                exists: !!window.GamePlayerManager,
+                initialize: typeof window.GamePlayerManager?.initialize, 
+                isFunction: typeof window.GamePlayerManager?.initialize === 'function'
+            });
             if (typeof window.GamePlayerManager?.initialize === 'function') {
                 await window.GamePlayerManager.initialize(players);
             } else {
@@ -53,6 +58,17 @@ window.GameSystemInitializer = {
                 await window.PlayerProgressManager.initialize();
             } else {
                 throw new Error('PlayerProgressManager not available or missing initialize method');
+            }
+            
+            // Step 7: Initialize CardManager
+            console.log('Initializing CardManager...');
+            if (typeof window.GameCardManager?.initialize === 'function') {
+                const cardResult = await window.GameCardManager.initialize();
+                if (!cardResult || !cardResult.success) {
+                    throw new Error(`Failed to initialize CardManager: ${cardResult?.errors?.join(', ') || 'Unknown error'}`);
+                }
+            } else {
+                throw new Error('CardManager not available or missing initialize method');
             }
             
             // Verify all systems are ready
@@ -75,7 +91,8 @@ window.GameSystemInitializer = {
             'GameSaveManager',
             'GameDataManager',
             'GamePlayerManager',
-            'PlayerProgressManager'
+            'PlayerProgressManager',
+            'GameCardManager'
         ];
         
         const missingDependencies = requiredDependencies.filter(
@@ -104,6 +121,11 @@ window.GameSystemInitializer = {
         // Check PlayerProgressManager - FIXED: Access as property not function
         if (!window.PlayerProgressManager.isInitialized) {
             throw new Error('PlayerProgressManager not initialized properly');
+        }
+        
+        // Check CardManager
+        if (!window.GameCardManager.isReady()) {
+            throw new Error('CardManager not ready after initialization');
         }
         
         console.log('All systems verified as ready');

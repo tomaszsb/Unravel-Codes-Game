@@ -9,6 +9,7 @@
     <!-- CSS files -->
     <link rel="stylesheet" href="css/theme.css">
     <link rel="stylesheet" href="css/game-styles.css">
+    <link rel="stylesheet" href="css/card-styles.css">
 
     <!-- Load React -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
@@ -126,7 +127,7 @@
     // Inline script loading to ensure correct order
     async function loadGameScripts() {
         try {
-            const totalScripts = 26; // Total number of scripts to load
+            const totalScripts = 29; // Total number of scripts to load
             let loadedScripts = 0;
             
             function updateLoadProgress(script) {
@@ -137,7 +138,7 @@
             
             logStatus('Starting script loading sequence');
             
-            // Core systems first
+            // Core systems first (order matters!)
             updateLoadProgress('file-system.js');
             await loadScript('js/file-system.js');
             
@@ -149,6 +150,9 @@
             
             updateLoadProgress('game-data-manager.js');
             await loadScript('js/game-data-manager.js');
+            
+            updateLoadProgress('card-manager.js');
+            await loadScript('js/card-manager.js');
             
             updateLoadProgress('player-palettes.js');
             await loadScript('js/player-palettes.js');
@@ -185,7 +189,10 @@
                 'game-instructions-component.js',
                 'performed-actions-component.js',
                 'move-selection-component.js',
-                'game-state-display-component.js'
+                'game-state-display-component.js',
+                'card-component.js',
+                'card-drawer-component.js',
+                'card-management-component.js'
             ];
             
             for (const component of legacyComponents) {

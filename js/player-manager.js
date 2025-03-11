@@ -88,9 +88,10 @@ class PlayerManager {
             this.players = [...playerData];
             console.log('Player array set:', this.players);
     
-            // Step 3: Load progress state
-            console.log('Step 3: Loading progress state...');
+            // Step 3: Load progress state and player cards
+            console.log('Step 3: Loading progress state and player cards...');
             let progressState = await window.GameSaveManager.load('progressState');
+            let playerCards = await window.GameSaveManager.load('playerCards');
             
             // Step 4: Create initial state if none exists
             if (!progressState) {
@@ -272,7 +273,189 @@ class PlayerManager {
         }
     }
 
-    initialize(players) {
+    /**
+     * Draw a card for a player
+     * @param {string} playerName - Player name
+     * @param {string} cardType - Card type (B, I, W, L, E)
+     * @param {Object} options - Optional parameters like filters
+     * @returns {Promise<Object|null>} The drawn card or null if failed
+     */
+    async drawCardForPlayer(playerName, cardType, options = {}) {
+        if (!playerName || !cardType) {
+            console.error('PlayerManager: Invalid parameters for drawCardForPlayer');
+            return null;
+        }
+        
+        try {
+            // Check if CardManager is available
+            if (!window.GameCardManager?.isReady()) {
+                await window.GameCardManager?.waitUntilReady();
+            }
+            
+            // Draw the card
+            const card = window.GameCardManager.drawCard(cardType, options);
+            if (!card) {
+                console.warn(`PlayerManager: No ${cardType} cards available to draw`);
+                return null;
+            }
+            
+            // Add the card to player's collection
+            const addSuccess = await window.GameSaveManager.addPlayerCard(playerName, card);
+            if (!addSuccess) {
+                console.error('PlayerManager: Failed to add card to player collection');
+                return null;
+            }
+            
+            console.log(`PlayerManager: Player ${playerName} drew a ${cardType} card:`, card);
+            
+            // Notify subscribers of the change
+            this.notifySubscribers();
+            return card;
+            
+        } catch (error) {
+            console.error('PlayerManager: Error drawing card:', error);
+            return null;
+        }
+    }
+    
+    /**
+     * Play a card from a player's hand
+     * @param {string} playerName - Player name
+     * @param {Object} card - Card to play
+     * @returns {Promise<boolean>} Whether the card was played successfully
+     */
+    async playCard(playerName, card) {
+        if (!playerName || !card || !card.type || !card.id) {
+            console.error('PlayerManager: Invalid parameters for playCard');
+            return false;
+        }
+        
+        try {
+            // Check if player has the card
+            if (!window.GameSaveManager.playerHasCard(playerName, card)) {
+                console.error(`PlayerManager: Player ${playerName} does not have card ${card.id}`);
+                return false;
+            }
+            
+            // Get current game state
+            const progressState = window.GameSaveManager.load('progressState');
+            if (!progressState) {
+                console.error('PlayerManager: No progress state found');
+                return false;
+            }
+            
+            // Check if card can be played
+            if (window.GameCardManager?.isReady()) {
+                const canPlay = window.GameCardManager.canPlayCard(card, progressState, playerName);
+                if (!canPlay) {
+                    console.warn(`PlayerManager: Card ${card.id} cannot be played in current state`);
+                    return false;
+                }
+            }
+            
+            // Apply card effect
+            if (window.GameCardManager?.isReady()) {
+                const updatedState = window.GameCardManager.applyCardEffect(card, progressState, playerName);
+                
+                // Save updated state
+                const saveSuccess = await window.GameSaveManager.save('progressState', updatedState);
+                if (!saveSuccess) {
+                    console.error('PlayerManager: Failed to save updated progress state');
+                    return false;
+                }
+            }
+            
+            // Remove card from player's hand
+            const removeSuccess = await window.GameSaveManager.removePlayerCard(playerName, card, 'played');
+            if (!removeSuccess) {
+                console.error('PlayerManager: Failed to remove played card');
+                return false;
+            }
+            
+            console.log(`PlayerManager: Player ${playerName} played ${card.type} card:`, card);
+            
+            // Notify subscribers of the change
+            this.notifySubscribers();
+            return true;
+            
+        } catch (error) {
+            console.error('PlayerManager: Error playing card:', error);
+            return false;
+        }
+    }
+    
+    /**
+     * Discard a card from a player's hand
+     * @param {string} playerName - Player name
+     * @param {Object} card - Card to discard
+     * @returns {Promise<boolean>} Whether the card was discarded successfully
+     */
+    async discardCard(playerName, card) {
+        if (!playerName || !card || !card.type || !card.id) {
+            console.error('PlayerManager: Invalid parameters for discardCard');
+            return false;
+        }
+        
+        try {
+            // Check if player has the card
+            if (!window.GameSaveManager.playerHasCard(playerName, card)) {
+                console.error(`PlayerManager: Player ${playerName} does not have card ${card.id}`);
+                return false;
+            }
+            
+            // Add card to discard pile
+            if (window.GameCardManager?.isReady()) {
+                window.GameCardManager.discardCard(card);
+            }
+            
+            // Remove card from player's hand
+            const removeSuccess = await window.GameSaveManager.removePlayerCard(playerName, card, 'discarded');
+            if (!removeSuccess) {
+                console.error('PlayerManager: Failed to remove discarded card');
+                return false;
+            }
+            
+            console.log(`PlayerManager: Player ${playerName} discarded ${card.type} card:`, card);
+            
+            // Notify subscribers of the change
+            this.notifySubscribers();
+            return true;
+            
+        } catch (error) {
+            console.error('PlayerManager: Error discarding card:', error);
+            return false;
+        }
+    }
+    
+    /**
+     * Get cards for a player
+     * @param {string} playerName - Player name
+     * @returns {Object|null} Player's cards or null if not found
+     */
+    getPlayerCards(playerName) {
+        return window.GameSaveManager.getPlayerCards(playerName);
+    }
+    
+    /**
+     * Get cards of a specific type for a player
+     * @param {string} playerName - Player name
+     * @param {string} cardType - Card type (B, I, W, L, E)
+     * @returns {Array|null} Player's cards of the specified type
+     */
+    getPlayerCardsByType(playerName, cardType) {
+        return window.GameSaveManager.getPlayerCardsByType(playerName, cardType);
+    }
+    
+    /**
+     * Get card history for a player
+     * @param {string} playerName - Player name
+     * @returns {Object|null} Player's card history
+     */
+    getPlayerCardHistory(playerName) {
+        return window.GameSaveManager.getPlayerCardHistory(playerName);
+    }
+
+    async initialize(players) {
         try {
             console.log('Initializing PlayerManager with players:', players);
     
@@ -288,6 +471,9 @@ class PlayerManager {
             if (!window.GameSaveManager.save('players', this.players)) {
                 throw new Error('Failed to save player state');
             }
+            
+            // Initialize player card collections
+            await window.GameSaveManager.initializePlayerCards(players);
 
             // Create initial progress state
             const progressState = {
@@ -489,4 +675,18 @@ class PlayerManager {
     }
 }
 // Create global instance
-window.GamePlayerManager = new PlayerManager();
+try {
+    window.GamePlayerManager = new PlayerManager();
+    console.log('GamePlayerManager successfully initialized');
+} catch (error) {
+    console.error('Failed to initialize GamePlayerManager:', error);
+    // Provide fallback
+    window.GamePlayerManager = {
+        initialize: async () => { throw new Error('GamePlayerManager not properly initialized'); },
+        isReady: () => false,
+        getCurrentPlayer: () => null,
+        getPlayerCount: () => 0,
+        moveToNextPlayer: () => null,
+        subscribe: () => () => {}
+    };
+}
